@@ -138,6 +138,7 @@
                                     <tr>
                                         <th scope="col" class="px-4 py-3">SN</th>
                                         <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="scrip">Scrip</th>
+                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="purchasePrice">Purchase Price</th>
                                         <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="ltp">LTP</th>
                                         <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="fiftyTwoWeekHigh">52w High</th>
                                         <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="fiftyTwoWeekLow">52w Low</th>
@@ -413,6 +414,7 @@ function renderHoldingsTable() {
         <tr class="border-b border-gray-700 hover:bg-gray-800">
             <td class="px-4 py-4 font-medium text-gray-300">${index + 1}</td>
             <td class="px-4 py-4 font-medium text-gray-100 whitespace-nowrap">${item.scrip}</td>
+            <td class="px-4 py-4 text-gray-400">${item.purchasePrice.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
             <td class="px-4 py-4">${item.ltp.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
             <td class="px-4 py-4 text-green-400">${item.fiftyTwoWeekHigh > 0 ? item.fiftyTwoWeekHigh.toLocaleString('en-IN') : 'N/A'}</td>
             <td class="px-4 py-4 text-red-400">${item.fiftyTwoWeekLow > 0 ? item.fiftyTwoWeekLow.toLocaleString('en-IN') : 'N/A'}</td>
