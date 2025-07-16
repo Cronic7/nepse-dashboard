@@ -149,6 +149,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="holdingsTableBody">
+                                    <!-- Data will be populated by JS -->
                                 </tbody>
                             </table>
                         </div>
@@ -182,6 +183,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="actionsTableBody">
+                                    <!-- Data will be populated by JS -->
                                 </tbody>
                             </table>
                         </div>
@@ -191,8 +193,7 @@
         </main>
         
         <footer class="text-center mt-12 text-sm text-gray-500">
-            <p>This report is generated for informational purposes only.</p>
-            <p>It does not constitute financial advice.</p>
+            <p>Developed by Pacman With ❤️</p>
         </footer>
     </div>
     
@@ -245,43 +246,7 @@
 
 <script>
 // --- DATA STORE & STATE ---
-let portfolioData = [
-    { scrip: 'SHIVM', sector: 'Manufacturing And Processing', quantity: 190, purchasePrice: 515, ltp: 515, recommendation: 'HOLD', rationale: 'Newly added blue-chip manufacturing stock. Excellent for diversification.' },
-    { scrip: 'DDBL', sector: 'Microfinance', quantity: 120, purchasePrice: 780, ltp: 782.11, recommendation: 'HOLD', rationale: 'High-quality MFI. Core holding for the sector.' },
-    { scrip: 'AKJCL', sector: 'Hydro Power', quantity: 200, purchasePrice: 211.90, ltp: 209.88, recommendation: 'HOLD', rationale: 'New holding. Monitor speculative P/E and dilutive rights issue.' },
-    { scrip: 'HDL', sector: 'Manufacturing And Processing', quantity: 43, purchasePrice: 1181.36, ltp: 1209, recommendation: 'HOLD', rationale: 'Excellent fundamentals, key diversifier.' },
-    { scrip: 'KBL', sector: 'Commercial Banks', quantity: 100, purchasePrice: 213.05, ltp: 219, recommendation: 'SELL', rationale: 'Consolidate banking exposure to simplify.' },
-    { scrip: 'SKBBL', sector: 'Microfinance', quantity: 39, purchasePrice: 668.17, ltp: 840, recommendation: 'HOLD', rationale: 'Strongest MFI holding, consistent dividends.' },
-    { scrip: 'RSDC', sector: 'Microfinance', quantity: 39, purchasePrice: 409.62, ltp: 732, recommendation: 'REDUCE', rationale: 'Reduce to consolidate capital into stronger MFIs.' },
-    { scrip: 'GBIME', sector: 'Commercial Banks', quantity: 300, purchasePrice: 222.33, ltp: 230, recommendation: 'HOLD', rationale: 'Core holding, but monitor high NPLs (4.98%).' },
-    { scrip: 'FMDBL', sector: 'Microfinance', quantity: 17, purchasePrice: 474.93, ltp: 809, recommendation: 'SELL', rationale: '🔴 Extreme P/E. High risk. Sell to de-risk.' },
-    { scrip: 'SRLI', sector: 'Life Insurance', quantity: 20, purchasePrice: 100, ltp: 446.8, recommendation: 'SELL', rationale: 'Consolidate life insurance holdings.' },
-    { scrip: 'NBF2', sector: 'Mutual Fund', quantity: 100, purchasePrice: 10, ltp: 9.45, recommendation: 'SELL', rationale: 'Position size is too small to have any impact.' },
-    { scrip: 'HRL', sector: 'Others', quantity: 31, purchasePrice: 202.58, ltp: 1029.9, recommendation: 'REDUCE', rationale: '🟡 Valuation Risk: High P/E suggests speculation.' },
-    { scrip: 'HLI', sector: 'Life Insurance', quantity: 23, purchasePrice: 100.45, ltp: 431, recommendation: 'SELL', rationale: 'Consolidate life insurance holdings.' },
-    { scrip: 'GCIL', sector: 'Manufacturing And Processing', quantity: 11, purchasePrice: 404.55, ltp: 577.5, recommendation: 'SELL', rationale: '🔴 Negative Earnings: Unprofitable company.' },
-    { scrip: 'CLI', sector: 'Life Insurance', quantity: 10, purchasePrice: 244, ltp: 721.5, recommendation: 'SELL', rationale: 'Consolidate life insurance holdings.' },
-    { scrip: 'USHEC', sector: 'Hydro Power', quantity: 10, purchasePrice: 100, ltp: 696, recommendation: 'SELL', rationale: 'Small, non-strategic hydro holding.' },
-    { scrip: 'UPPER', sector: 'Hydro Power', quantity: 80, purchasePrice: 100, ltp: 209.7, recommendation: 'SELL', rationale: 'Sell to reduce overall hydropower exposure.' },
-    { scrip: 'UPCL', sector: 'Hydro Power', quantity: 54, purchasePrice: 100, ltp: 306.9, recommendation: 'REDUCE', rationale: 'Reduce exposure to hydropower sector policy risk.' },
-    { scrip: 'UAIL', sector: 'Non-Life Insurance', quantity: 27, purchasePrice: 428.7, ltp: 703, recommendation: 'HOLD', rationale: 'Provides diversification into the non-life space.' },
-    { scrip: 'SNLI', sector: 'Life Insurance', quantity: 10, purchasePrice: 239, ltp: 725, recommendation: 'SELL', rationale: 'Consolidate life insurance holdings.' },
-    { scrip: 'SJCL', sector: 'Hydro Power', quantity: 10, purchasePrice: 100, ltp: 356, recommendation: 'SELL', rationale: 'Small, non-strategic hydro holding.' },
-    { scrip: 'SGHC', sector: 'Hydro Power', quantity: 10, purchasePrice: 100, ltp: 577, recommendation: 'SELL', rationale: 'Small, non-strategic hydro holding.' },
-    { scrip: 'RNLI', sector: 'Life Insurance', quantity: 11, purchasePrice: 100, ltp: 567, recommendation: 'SELL', rationale: 'Consolidate life insurance holdings.' },
-    { scrip: 'RHGCL', sector: 'Hydro Power', quantity: 10, purchasePrice: 100, ltp: 652, recommendation: 'SELL', rationale: '🔴 Negative Earnings & Dilution Risk.' },
-    { scrip: 'PRVU', sector: 'Commercial Banks', quantity: 366, purchasePrice: 142.45, ltp: 231.1, recommendation: 'HOLD', rationale: 'Core bank, but watch asset quality issues.' },
-    { scrip: 'PPCL', sector: 'Hydro Power', quantity: 10, purchasePrice: 100, ltp: 320, recommendation: 'SELL', rationale: 'Small holding in a company with a history of losses.' },
-    { scrip: 'PMLI', sector: 'Life Insurance', quantity: 32, purchasePrice: 496.24, ltp: 587.9, recommendation: 'SELL', rationale: '🔴 Zero Earnings: No fundamental reason to hold.' },
-    { scrip: 'NMB', sector: 'Commercial Banks', quantity: 133, purchasePrice: 231.31, ltp: 263, recommendation: 'SELL', rationale: 'Consolidate banking exposure into stronger core holdings.' },
-    { scrip: 'NIMB', sector: 'Commercial Banks', quantity: 300, purchasePrice: 194.63, ltp: 229, recommendation: 'HOLD', rationale: 'Strong fundamentals, attractive valuation.' },
-    { scrip: 'NIFRA', sector: 'Investment', quantity: 183, purchasePrice: 339.8, ltp: 296, recommendation: 'HOLD', rationale: 'Strategic asset, successful Green Bond issue.' },
-    { scrip: 'NICLBSL', sector: 'Microfinance', quantity: 10, purchasePrice: 100, ltp: 707.7, recommendation: 'SELL', rationale: '🔴 Extreme Valuation: P/E over 6000 is a major red flag.' },
-    { scrip: 'JOSHI', sector: 'Hydro Power', quantity: 20, purchasePrice: 100, ltp: 414.5, recommendation: 'SELL', rationale: 'Non-strategic, small holding in a high-risk sector.' },
-    { scrip: 'GLH', sector: 'Hydro Power', quantity: 10, purchasePrice: 100, ltp: 270.1, recommendation: 'SELL', rationale: 'Small, non-strategic hydro holding.' },
-    { scrip: 'AVYAN', sector: 'Microfinance', quantity: 10, purchasePrice: 100, ltp: 1199, recommendation: 'SELL', rationale: '🔴 Very high P/E ratio. Sell to reduce risk.' }
-].map(stock => ({ ...stock, fiftyTwoWeekHigh: 0, fiftyTwoWeekLow: 0 })); // Initialize 52w properties
-
+let portfolioData = []; // Data will be fetched from API
 let sortState = { column: 'currentValue', direction: 'desc' };
 let chartInstances = {};
 
@@ -291,9 +256,94 @@ document.addEventListener('DOMContentLoaded', async () => {
     Chart.defaults.borderColor = '#374151';
 
     setDashboardDate();
-    await fetchLtpFromApi(false);
+    await fetchPortfolioData(); // Fetch initial portfolio from summary API
+    runAllCalculations(); // Initial calculation and render
     setupEventListeners();
 });
+
+// --- API INTERACTIONS ---
+async function fetchPortfolioData() {
+    const syncBtn = document.getElementById('syncLtpBtn');
+    syncBtn.disabled = true; // Disable button during initial load
+    try {
+        const apiUrl = 'https://nepsefloorsheetapi.onrender.com/api/v1/portfolio/summary';
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error(`API Error: ${response.status}`);
+        
+        const apiData = await response.json();
+        
+        portfolioData = apiData.map(item => {
+            const [high, low] = String(item['52 week high/low']).split(' / ').map(val => parseFloat(val.replace(/,/g, '')));
+            return {
+                scrip: item.Script,
+                quantity: parseFloat(item.quantity),
+                purchasePrice: parseFloat(item['purchase price']),
+                ltp: parseFloat(String(item.LTP).replace(/,/g, '')),
+                fiftyTwoWeekHigh: high || 0,
+                fiftyTwoWeekLow: low || 0,
+                sector: item.Sector || 'Uncategorized', 
+                recommendation: 'HOLD',
+                rationale: 'Data loaded from API. Analysis pending.'
+            };
+        });
+        
+    } catch (error) {
+        console.error('Failed to fetch portfolio summary:', error);
+        alert(`Could not fetch portfolio data. Please check your connection or try again later.\nError: ${error.message}`);
+    } finally {
+        syncBtn.disabled = false; // Re-enable button after load
+    }
+}
+
+function setupApiSync() {
+    document.getElementById('syncLtpBtn').addEventListener('click', () => fetchLtpFromApi(true));
+}
+
+async function fetchLtpFromApi(showAlerts = true) {
+    const syncBtn = document.getElementById('syncLtpBtn'), syncBtnText = document.getElementById('syncBtnText');
+    syncBtn.disabled = true;
+    syncBtnText.textContent = '...';
+    try {
+        const apiUrl = 'https://nepsefloorsheetapi.onrender.com/api/v1/share-prices';
+        const response = await fetch(apiUrl);
+        
+        if (!response.ok) throw new Error(`API Error: ${response.status}`);
+        const apiData = await response.json();
+        if (!Array.isArray(apiData) || apiData.length === 0) {
+            if (showAlerts) alert("No data from API. Using last known values.");
+            return;
+        }
+        const priceMap = new Map();
+        apiData.forEach(item => {
+            if (item.Symbol) {
+                priceMap.set(item.Symbol, {
+                    ltp: parseFloat(String(item.LTP).replace(/,/g, '')),
+                    high: parseFloat(String(item['52 Weeks High']).replace(/,/g, '')),
+                    low: parseFloat(String(item['52 Weeks Low']).replace(/,/g, ''))
+                });
+            }
+        });
+        let updatedCount = 0;
+        portfolioData.forEach(stock => {
+            if (priceMap.has(stock.scrip)) {
+                const data = priceMap.get(stock.scrip);
+                if (!isNaN(data.ltp)) stock.ltp = data.ltp;
+                if (!isNaN(data.high)) stock.fiftyTwoWeekHigh = data.high;
+                if (!isNaN(data.low)) stock.fiftyTwoWeekLow = data.low;
+                updatedCount++;
+            }
+        });
+        if (showAlerts) alert(updatedCount > 0 ? `${updatedCount} stocks updated.` : "No matching stocks found to update.");
+    } catch (error) {
+        console.error('Failed to fetch live prices:', error);
+        if (showAlerts) alert(`Could not fetch live prices.\nError: ${error.message}`);
+    } finally {
+        runAllCalculations();
+        syncBtn.disabled = false;
+        syncBtnText.textContent = 'Sync';
+    }
+}
+
 
 // --- CORE FUNCTIONS ---
 function runAllCalculations() {
@@ -343,7 +393,8 @@ function calculatePortfolioMetrics() {
 function renderSectorAllocationChart(canvasId) {
     const ctx = document.getElementById(canvasId).getContext('2d');
     const sectorData = portfolioData.reduce((acc, stock) => {
-        acc[stock.sector] = (acc[stock.sector] || 0) + stock.currentValue;
+        const sector = stock.sector || 'Uncategorized';
+        acc[sector] = (acc[sector] || 0) + stock.currentValue;
         return acc;
     }, {});
     if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
@@ -404,6 +455,7 @@ function renderPlBarChart(canvasId, showAll = false) {
 // --- TABLE RENDERING ---
 function renderHoldingsTable() {
     const tableBody = document.getElementById('holdingsTableBody');
+    if (!tableBody) return;
     const sortedData = [...portfolioData].sort((a, b) => {
         const valA = a[sortState.column], valB = b[sortState.column];
         if (valA === null || valA === undefined) return 1;
@@ -428,6 +480,7 @@ function renderHoldingsTable() {
 
 function renderActionsTable(filter = 'all') {
     const tableBody = document.getElementById('actionsTableBody');
+    if (!tableBody) return;
     const sortedData = [...portfolioData].sort((a,b) => b.currentValue - a.currentValue);
     const filteredData = filter === 'all' ? sortedData : sortedData.filter(item => item.recommendation === filter);
     tableBody.innerHTML = filteredData.map(item => `
@@ -435,7 +488,7 @@ function renderActionsTable(filter = 'all') {
             <td class="px-6 py-4 font-medium text-gray-100 whitespace-nowrap">${item.scrip}</td>
             <td class="px-6 py-4">${item.sector}</td>
             <td class="px-6 py-4 font-medium ${item.profitOrLossPercent >= 0 ? 'profit' : 'loss'}">${item.profitOrLossPercent.toFixed(2)}%</td>
-            <td class="px-6 py-4"><span class="px-2 py-1 text-xs font-semibold rounded-full action-${item.recommendation.toLowerCase()}">${item.recommendation}</span></td>
+            <td class="px-6 py-4"><span class="px-2 py-1 text-xs font-semibold rounded-full action-${(item.recommendation || 'hold').toLowerCase()}">${item.recommendation || 'HOLD'}</span></td>
             <td class="px-6 py-4 text-xs">${item.rationale}</td>
         </tr>
     `).join('');
@@ -535,56 +588,6 @@ function setupChartExpansion() {
     modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 }
 
-// --- API INTERACTIONS ---
-function setupApiSync() {
-    document.getElementById('syncLtpBtn').addEventListener('click', () => fetchLtpFromApi(true));
-}
-
-async function fetchLtpFromApi(showAlerts = true) {
-    const syncBtn = document.getElementById('syncLtpBtn'), syncBtnText = document.getElementById('syncBtnText');
-    syncBtn.disabled = true;
-    syncBtnText.textContent = '...';
-    try {
-        const apiUrl = 'https://nepsefloorsheetapi.onrender.com/api/v1/share-prices';
-        const response = await fetch(apiUrl);
-        
-        if (!response.ok) throw new Error(`API Error: ${response.status}`);
-        const apiData = await response.json();
-        if (!Array.isArray(apiData) || apiData.length === 0) {
-            if (showAlerts) alert("No data from API. Using last known values.");
-            return;
-        }
-        const priceMap = new Map();
-        apiData.forEach(item => {
-            if (item.Symbol) {
-                // Use the correct keys from the API response
-                priceMap.set(item.Symbol, {
-                    ltp: parseFloat(String(item.LTP).replace(/,/g, '')),
-                    high: parseFloat(String(item['52 Weeks High']).replace(/,/g, '')),
-                    low: parseFloat(String(item['52 Weeks Low']).replace(/,/g, ''))
-                });
-            }
-        });
-        let updatedCount = 0;
-        portfolioData.forEach(stock => {
-            if (priceMap.has(stock.scrip)) {
-                const data = priceMap.get(stock.scrip);
-                if (!isNaN(data.ltp)) stock.ltp = data.ltp;
-                if (!isNaN(data.high)) stock.fiftyTwoWeekHigh = data.high;
-                if (!isNaN(data.low)) stock.fiftyTwoWeekLow = data.low;
-                updatedCount++;
-            }
-        });
-        if (showAlerts) alert(updatedCount > 0 ? `${updatedCount} stocks updated.` : "No matching stocks found to update.");
-    } catch (error) {
-        console.error('Failed to fetch live prices:', error);
-        if (showAlerts) alert(`Could not fetch live prices.\nError: ${error.message}`);
-    } finally {
-        runAllCalculations();
-        syncBtn.disabled = false;
-        syncBtnText.textContent = 'Sync';
-    }
-}
 
 // --- UTILITY FUNCTIONS ---
 function setDashboardDate() {
