@@ -34,14 +34,6 @@
         .expandable-chart:hover {
             transform: scale(1.02);
         }
-        .tab-active {
-            border-bottom: 2px solid #6366f1; /* Brighter Indigo for active tab */
-            color: #818cf8;
-            font-weight: 600;
-        }
-        .tab-inactive {
-            color: #9ca3af; /* Lighter gray for inactive tabs */
-        }
         .table-header-sortable {
             cursor: pointer;
             transition: color 0.2s;
@@ -49,16 +41,37 @@
         .table-header-sortable:hover {
             color: #818cf8; /* Brighter Indigo on hover */
         }
-        /* Action Tags with dark backgrounds */
-        .action-hold { background-color: rgba(99, 102, 241, 0.2); border: 1px solid rgba(99, 102, 241, 0.5); color: #c7d2fe; }
-        .action-reduce { background-color: rgba(252, 211, 77, 0.2); border: 1px solid rgba(252, 211, 77, 0.5); color: #fde68a; }
-        .action-sell { background-color: rgba(248, 113, 113, 0.2); border: 1px solid rgba(248, 113, 113, 0.5); color: #fecaca; }
-        
         .profit { color: #4ade80; } /* Brighter Green for profit */
         .loss { color: #f87171; } /* Brighter Red for loss */
 
         .fade-in { animation: fadeIn 0.5s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Glassmorphism Toast --- */
+        #toast-message {
+            position: fixed;
+            bottom: -100px; /* Start off-screen */
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(31, 41, 55, 0.6); /* Semi-transparent dark background */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #e5e7eb;
+            padding: 0.75rem 1.25rem;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            z-index: 100;
+            transition: bottom 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            opacity: 0;
+        }
+        #toast-message.show {
+            bottom: 2rem;
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -82,34 +95,80 @@
 
         <main>
             <!-- Portfolio Performance Metrics -->
-            <section id="metrics" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div class="card p-6 rounded-xl shadow-lg">
-                    <h3 class="text-sm font-medium text-gray-400">Total Portfolio Value</h3>
-                    <p id="totalValue" class="text-2xl font-semibold text-gray-100 mt-2">NPR 0.00</p>
+            <section id="metrics" class="mb-8">
+                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- Total Portfolio Value -->
+                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-indigo-500/20 hover:shadow-lg hover:-translate-y-1">
+                        <div class="bg-indigo-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg></div>
+                        <div><p class="text-sm text-gray-400">Portfolio Value</p><p id="totalValue" class="font-bold text-gray-100 text-xl">N/A</p></div>
+                    </div>
+                     <!-- Total Investment -->
+                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-cyan-500/20 hover:shadow-lg hover:-translate-y-1">
+                        <div class="bg-cyan-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
+                        <div><p class="text-sm text-gray-400">Total Investment</p><p id="totalInvestment" class="font-bold text-gray-100 text-xl">N/A</p></div>
+                    </div>
+                     <!-- Total Profit/Loss -->
+                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-gray-500/20 hover:shadow-lg hover:-translate-y-1">
+                        <div id="totalPLIconContainer" class="bg-gray-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h5M20 20v-5h-5M4 20L20 4" /></svg></div>
+                        <div><p class="text-sm text-gray-400">Total P/L</p><p id="totalPL" class="font-bold text-xl">N/A</p></div>
+                    </div>
+                     <!-- Portfolio Return % -->
+                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-gray-500/20 hover:shadow-lg hover:-translate-y-1">
+                        <div id="portfolioReturnIconContainer" class="bg-gray-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
+                        <div><p class="text-sm text-gray-400">Portfolio Return</p><p id="portfolioReturn" class="font-bold text-xl">N/A</p></div>
+                    </div>
                 </div>
-                <div class="card p-6 rounded-xl shadow-lg">
-                    <h3 class="text-sm font-medium text-gray-400">Total Investment</h3>
-                    <p id="totalInvestment" class="text-2xl font-semibold text-gray-100 mt-2">NPR 0.00</p>
+            </section>
+
+            <!-- Market Summary Section -->
+            <section id="market-summary" class="mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-gray-100">Today's Market Snapshot</h2>
+                    <span id="marketSummaryDate" class="text-sm text-gray-400"></span>
                 </div>
-                <div class="card p-6 rounded-xl shadow-lg">
-                    <h3 class="text-sm font-medium text-gray-400">Total Profit/Loss</h3>
-                    <p id="totalPL" class="text-2xl font-semibold text-gray-100 mt-2">NPR 0.00</p>
-                </div>
-                <div class="card p-6 rounded-xl shadow-lg">
-                    <h3 class="text-sm font-medium text-gray-400">Portfolio Return %</h3>
-                    <p id="portfolioReturn" class="text-2xl font-semibold text-gray-100 mt-2">0.00%</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    <!-- Turnover -->
+                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-blue-500/20 hover:shadow-lg hover:-translate-y-1">
+                        <div class="bg-blue-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg></div>
+                        <div><p class="text-sm text-gray-400">Turnover</p><p id="marketTurnover" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
+                    </div>
+                    <!-- Traded Shares -->
+                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-green-500/20 hover:shadow-lg hover:-translate-y-1">
+                        <div class="bg-green-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" /></svg></div>
+                        <div><p class="text-sm text-gray-400">Traded Shares</p><p id="marketTradedShares" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
+                    </div>
+                    <!-- Transactions -->
+                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-yellow-500/20 hover:shadow-lg hover:-translate-y-1">
+                        <div class="bg-yellow-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg></div>
+                        <div><p class="text-sm text-gray-400">Transactions</p><p id="marketTransactions" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
+                    </div>
+                    <!-- Scrips Traded -->
+                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-purple-500/20 hover:shadow-lg hover:-translate-y-1">
+                        <div class="bg-purple-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 8v5a2 2 0 002 2h6" /></svg></div>
+                        <div><p class="text-sm text-gray-400">Scrips Traded</p><p id="marketScripsTraded" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
+                    </div>
+                    <!-- Mkt. Cap (Float) -->
+                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-pink-500/20 hover:shadow-lg hover:-translate-y-1">
+                        <div class="bg-pink-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg></div>
+                        <div><p class="text-sm text-gray-400">Mkt. Cap (Float)</p><p id="marketFloatCap" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
+                    </div>
+                    <!-- Mkt. Cap (Total) -->
+                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-red-500/20 hover:shadow-lg hover:-translate-y-1">
+                        <div class="bg-red-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2h10a2 2 0 002-2v-1a2 2 0 012-2h1.945M7.737 16.525l.001-.001M16.263 16.525l.001-.001M12 21a9 9 0 100-18 9 9 0 000 18z" /></svg></div>
+                        <div><p class="text-sm text-gray-400">Mkt. Cap (Total)</p><p id="marketTotalCap" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
+                    </div>
                 </div>
             </section>
 
             <!-- Visualizations Section -->
-            <section id="visualizations" class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 fade-in">
-                <div class="section p-6 rounded-xl shadow-lg expandable-chart" data-chart-name="sector">
+            <section id="visualizations" class="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-8 fade-in">
+                <div class="section p-6 rounded-xl shadow-lg expandable-chart lg:col-span-2" data-chart-name="sector">
                     <h2 class="text-xl font-semibold text-gray-100 mb-4">Sector Allocation</h2>
                     <div class="chart-container">
                         <canvas id="sectorAllocationChart"></canvas>
                     </div>
                 </div>
-                <div class="section p-6 rounded-xl shadow-lg expandable-chart" data-chart-name="pl">
+                <div class="section p-6 rounded-xl shadow-lg expandable-chart lg:col-span-3" data-chart-name="pl">
                     <h2 class="text-xl font-semibold text-gray-100 mb-4">Top/Bottom P/L by Stock</h2>
                      <div class="chart-container">
                         <canvas id="plBarChart"></canvas>
@@ -117,79 +176,31 @@
                 </div>
             </section>
             
-            <!-- Tabs -->
-            <div class="border-b border-gray-700 mb-6">
-                <nav class="flex space-x-6" id="tabs">
-                    <button data-tab="overview" class="py-3 px-1 text-sm font-medium tab-active">Portfolio Overview</button>
-                    <button data-tab="actions" class="py-3 px-1 text-sm font-medium tab-inactive">Action Plan</button>
-                </nav>
-            </div>
-
-            <!-- Tab Content -->
-            <div id="tab-content">
-                <!-- Overview Tab -->
-                <div id="overview-content" class="fade-in">
-                    <div class="section p-6 rounded-xl shadow-lg">
-                        <h2 class="text-xl font-semibold text-gray-100 mb-1">Holdings Details & Performance</h2>
-                        <p class="text-sm text-gray-400 mb-4">Click on column headers to sort the table by performance metrics.</p>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left text-gray-400">
-                                <thead class="text-xs text-gray-400 uppercase bg-gray-800">
-                                    <tr>
-                                        <th scope="col" class="px-4 py-3">SN</th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="scrip">Scrip</th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="purchasePrice">Purchase Price</th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="ltp">LTP</th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="fiftyTwoWeekHigh">52w High</th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="fiftyTwoWeekLow">52w Low</th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="profitOrLoss">P/L (NPR)</th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="profitOrLossPercent">P/L (%)</th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="currentValue">Current Value</th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="weight">Weight (%)</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="holdingsTableBody">
-                                    <!-- Data will be populated by JS -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+            <!-- Main Content Section -->
+             <section class="section p-4 sm:p-6 rounded-xl shadow-lg">
+                <h2 class="text-xl font-semibold text-gray-100 mb-4">Portfolio Holdings</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left text-gray-400">
+                        <thead class="text-xs text-gray-400 uppercase bg-gray-700/50">
+                            <tr>
+                                <th scope="col" class="px-4 py-3">SN</th>
+                                <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="scrip">Scrip</th>
+                                <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="purchasePrice">Purchase Price</th>
+                                <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="ltp">LTP</th>
+                                <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="fiftyTwoWeekHigh">52w High</th>
+                                <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="fiftyTwoWeekLow">52w Low</th>
+                                <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="profitOrLoss">P/L (NPR)</th>
+                                <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="profitOrLossPercent">P/L (%)</th>
+                                <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="currentValue">Current Value</th>
+                                <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="weight">Weight (%)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="holdingsTableBody">
+                            <!-- Data will be populated by JS -->
+                        </tbody>
+                    </table>
                 </div>
-
-                <!-- Action Plan Tab -->
-                <div id="actions-content" class="hidden fade-in">
-                    <div class="section p-6 rounded-xl shadow-lg">
-                        <div class="flex flex-wrap items-center justify-between mb-4 gap-4">
-                            <div>
-                                <h2 class="text-xl font-semibold text-gray-100">Recommended Actions</h2>
-                                <p class="text-sm text-gray-400 mt-1">Filter actions to focus on de-risking and optimization.</p>
-                            </div>
-                            <div class="flex space-x-2">
-                                <button data-filter="all" class="filter-btn bg-indigo-500 text-white px-3 py-1.5 text-sm rounded-full font-medium">All</button>
-                                <button data-filter="HOLD" class="filter-btn bg-gray-700 text-gray-200 px-3 py-1.5 text-sm rounded-full font-medium">Hold</button>
-                                <button data-filter="REDUCE" class="filter-btn bg-gray-700 text-gray-200 px-3 py-1.5 text-sm rounded-full font-medium">Reduce</button>
-                                <button data-filter="SELL" class="filter-btn bg-gray-700 text-gray-200 px-3 py-1.5 text-sm rounded-full font-medium">Sell</button>
-                            </div>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left text-gray-400">
-                                <thead class="text-xs text-gray-400 uppercase bg-gray-800">
-                                    <tr>
-                                        <th scope="col" class="px-6 py-3">Scrip</th>
-                                        <th scope="col" class="px-6 py-3">Sector</th>
-                                        <th scope="col" class="px-6 py-3">P/L (%)</th>
-                                        <th scope="col" class="px-6 py-3">Recommendation</th>
-                                        <th scope="col" class="px-6 py-3">Key Rationale & Alerts</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="actionsTableBody">
-                                    <!-- Data will be populated by JS -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </section>
         </main>
         
         <footer class="text-center mt-12 text-sm text-gray-500">
@@ -243,12 +254,19 @@
         </div>
     </div>
 
+    <!-- Toast Message -->
+    <div id="toast-message">
+        <span id="toast-icon"></span>
+        <span id="toast-text"></span>
+    </div>
+
 
 <script>
 // --- DATA STORE & STATE ---
 let portfolioData = []; // Data will be fetched from API
 let sortState = { column: 'currentValue', direction: 'desc' };
 let chartInstances = {};
+let toastTimeout;
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', async () => {
@@ -256,12 +274,90 @@ document.addEventListener('DOMContentLoaded', async () => {
     Chart.defaults.borderColor = '#374151';
 
     setDashboardDate();
+    await fetchMarketSummary(); // Fetch market summary
     await fetchPortfolioData(); // Fetch initial portfolio from summary API
     runAllCalculations(); // Initial calculation and render
     setupEventListeners();
 });
 
+// --- UI FUNCTIONS ---
+function showToast(message, type = 'info') {
+    const toast = document.getElementById('toast-message');
+    const toastText = document.getElementById('toast-text');
+    const toastIcon = document.getElementById('toast-icon');
+
+    if (toastTimeout) clearTimeout(toastTimeout);
+
+    toastText.textContent = message;
+    let iconSvg = '';
+    let iconColor = '';
+
+    switch (type) {
+        case 'success':
+            iconColor = 'text-green-400';
+            iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ${iconColor}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+            break;
+        case 'error':
+            iconColor = 'text-red-400';
+            iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ${iconColor}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+            break;
+        default: // info
+            iconColor = 'text-blue-400';
+            iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ${iconColor}" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+    }
+    
+    toastIcon.innerHTML = iconSvg;
+    toast.classList.add('show');
+
+    toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+    }, 4000);
+}
+
+
 // --- API INTERACTIONS ---
+async function fetchMarketSummary() {
+    try {
+        const apiUrl = 'https://nepsefloorsheetapi.onrender.com/api/v1/portfolio/market-summary';
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error(`API Error: ${response.status}`);
+        
+        const data = await response.json();
+
+        // Helper to format large numbers
+        const formatNumber = (num) => {
+            if (num >= 1e11) return (num / 1e11).toFixed(2) + ' Kharba';
+            if (num >= 1e9) return (num / 1e9).toFixed(2) + ' Arba';
+            if (num >= 1e7) return (num / 1e7).toFixed(2) + ' Cr';
+            if (num >= 1e5) return (num / 1e5).toFixed(2) + ' Lakh';
+            return num.toLocaleString('en-IN');
+        };
+        
+        const parseAndFormatCap = (capString) => {
+            if (!capString || typeof capString !== 'string') return 'N/A';
+            const value = parseFloat(capString.replace(/,/g, '')) * 1e6; // Value is in Millions
+            return `NPR ${formatNumber(value)}`;
+        };
+
+        document.getElementById('marketTurnover').textContent = `NPR ${formatNumber(data['Total Turnovers'])}`;
+        document.getElementById('marketTradedShares').textContent = formatNumber(data['Total Traded Shares']);
+        document.getElementById('marketTransactions').textContent = data['Total Transaction'].toLocaleString('en-IN');
+        document.getElementById('marketScripsTraded').textContent = data['Total Scrips Traded'].toLocaleString('en-IN');
+        document.getElementById('marketFloatCap').textContent = parseAndFormatCap(data['Floated Market Cap']);
+        document.getElementById('marketTotalCap').textContent = parseAndFormatCap(data['Total Market Cap']);
+        
+        // Update market summary date
+        if(data.Date) {
+             document.getElementById('marketSummaryDate').textContent = new Date(data.Date).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+        }
+
+    } catch (error) {
+        console.error('Failed to fetch market summary:', error);
+        document.getElementById('market-summary').innerHTML = '<p class="text-center text-red-400">Could not load market summary.</p>';
+    }
+}
+
+
 async function fetchPortfolioData() {
     const syncBtn = document.getElementById('syncLtpBtn');
     syncBtn.disabled = true; // Disable button during initial load
@@ -282,14 +378,12 @@ async function fetchPortfolioData() {
                 fiftyTwoWeekHigh: high || 0,
                 fiftyTwoWeekLow: low || 0,
                 sector: item.Sector || 'Uncategorized', 
-                recommendation: 'HOLD',
-                rationale: 'Data loaded from API. Analysis pending.'
             };
         });
         
     } catch (error) {
         console.error('Failed to fetch portfolio summary:', error);
-        alert(`Could not fetch portfolio data. Please check your connection or try again later.\nError: ${error.message}`);
+        showToast('Could not fetch portfolio data.', 'error');
     } finally {
         syncBtn.disabled = false; // Re-enable button after load
     }
@@ -303,6 +397,8 @@ async function fetchLtpFromApi(showAlerts = true) {
     const syncBtn = document.getElementById('syncLtpBtn'), syncBtnText = document.getElementById('syncBtnText');
     syncBtn.disabled = true;
     syncBtnText.textContent = '...';
+    if(showAlerts) showToast('Syncing latest prices...', 'info');
+
     try {
         const apiUrl = 'https://nepsefloorsheetapi.onrender.com/api/v1/share-prices';
         const response = await fetch(apiUrl);
@@ -310,7 +406,7 @@ async function fetchLtpFromApi(showAlerts = true) {
         if (!response.ok) throw new Error(`API Error: ${response.status}`);
         const apiData = await response.json();
         if (!Array.isArray(apiData) || apiData.length === 0) {
-            if (showAlerts) alert("No data from API. Using last known values.");
+            if (showAlerts) showToast("No data from API. Using last known values.", "info");
             return;
         }
         const priceMap = new Map();
@@ -333,10 +429,10 @@ async function fetchLtpFromApi(showAlerts = true) {
                 updatedCount++;
             }
         });
-        if (showAlerts) alert(updatedCount > 0 ? `${updatedCount} stocks updated.` : "No matching stocks found to update.");
+        if (showAlerts) showToast(updatedCount > 0 ? `${updatedCount} stocks updated.` : "No matching stocks found to update.", "success");
     } catch (error) {
         console.error('Failed to fetch live prices:', error);
-        if (showAlerts) alert(`Could not fetch live prices.\nError: ${error.message}`);
+        if (showAlerts) showToast(`Could not fetch live prices.`, "error");
     } finally {
         runAllCalculations();
         syncBtn.disabled = false;
@@ -349,15 +445,12 @@ async function fetchLtpFromApi(showAlerts = true) {
 function runAllCalculations() {
     calculatePortfolioMetrics();
     renderHoldingsTable();
-    renderActionsTable();
     renderSectorAllocationChart('sectorAllocationChart');
     renderPlBarChart('plBarChart');
 }
 
 function setupEventListeners() {
-    setupTabs();
     setupSorting();
-    setupFiltering();
     setupModal();
     setupAddStockForm();
     setupApiSync();
@@ -379,14 +472,28 @@ function calculatePortfolioMetrics() {
     });
     const totalPL = totalCurrentValue - totalPurchaseValue;
     const portfolioReturn = totalPurchaseValue > 0 ? (totalPL / totalPurchaseValue) * 100 : 0;
+
+    // Update Portfolio Value
     document.getElementById('totalValue').textContent = `NPR ${totalCurrentValue.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    
+    // Update Total Investment
     document.getElementById('totalInvestment').textContent = `NPR ${totalPurchaseValue.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
+    // Update Total P/L
     const totalPLElement = document.getElementById('totalPL');
+    const totalPLIconContainer = document.getElementById('totalPLIconContainer');
     totalPLElement.textContent = `NPR ${totalPL.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-    totalPLElement.className = `text-2xl font-semibold mt-2 ${totalPL >= 0 ? 'profit' : 'loss'}`;
+    totalPLElement.className = `font-bold text-xl ${totalPL >= 0 ? 'profit' : 'loss'}`;
+    totalPLIconContainer.className = `p-3 rounded-lg ${totalPL >= 0 ? 'bg-green-500/10' : 'bg-red-500/10'}`;
+    totalPLIconContainer.firstElementChild.className = `h-7 w-7 ${totalPL >= 0 ? 'text-green-400' : 'text-red-400'}`;
+
+    // Update Portfolio Return
     const portfolioReturnElement = document.getElementById('portfolioReturn');
+    const portfolioReturnIconContainer = document.getElementById('portfolioReturnIconContainer');
     portfolioReturnElement.textContent = `${portfolioReturn.toFixed(2)}%`;
-    portfolioReturnElement.className = `text-2xl font-semibold mt-2 ${portfolioReturn >= 0 ? 'profit' : 'loss'}`;
+    portfolioReturnElement.className = `font-bold text-xl ${portfolioReturn >= 0 ? 'profit' : 'loss'}`;
+    portfolioReturnIconContainer.className = `p-3 rounded-lg ${portfolioReturn >= 0 ? 'bg-green-500/10' : 'bg-red-500/10'}`;
+    portfolioReturnIconContainer.firstElementChild.className = `h-7 w-7 ${portfolioReturn >= 0 ? 'text-green-400' : 'text-red-400'}`;
 }
 
 // --- CHART RENDERING ---
@@ -423,9 +530,9 @@ function renderPlBarChart(canvasId, showAll = false) {
     const sortedByPl = [...portfolioData].sort((a, b) => a.profitOrLoss - b.profitOrLoss);
     
     let dataToShow = sortedByPl;
-    if (!showAll && sortedByPl.length > 20) {
-        const losers = sortedByPl.slice(0, 10);
-        const winners = sortedByPl.slice(-10);
+    if (!showAll && sortedByPl.length > 15) {
+        const losers = sortedByPl.slice(0, 7);
+        const winners = sortedByPl.slice(-8);
         dataToShow = [...losers, ...winners].sort((a, b) => a.profitOrLoss - b.profitOrLoss);
     }
 
@@ -447,7 +554,25 @@ function renderPlBarChart(canvasId, showAll = false) {
             responsive: true,
             maintainAspectRatio: false,
             plugins: { legend: { display: false } },
-            scales: { x: { ticks: { callback: (value) => (value / 1000).toFixed(1) + 'k' } } }
+            scales: { 
+                x: { 
+                    ticks: { 
+                        color: '#9ca3af',
+                        callback: (value) => (value / 1000).toFixed(1) + 'k' 
+                    },
+                    grid: {
+                        color: '#374151'
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: '#d1d5db'
+                    },
+                     grid: {
+                        display: false
+                    }
+                }
+            }
         }
     });
 }
@@ -463,7 +588,7 @@ function renderHoldingsTable() {
         return sortState.direction === 'asc' ? (typeof valA === 'string' ? valA.localeCompare(valB) : valA - valB) : (typeof valA === 'string' ? valB.localeCompare(valA) : valB - valA);
     });
     tableBody.innerHTML = sortedData.map((item, index) => `
-        <tr class="border-b border-gray-700 hover:bg-gray-800">
+        <tr class="border-b border-gray-700 hover:bg-gray-800/50">
             <td class="px-4 py-4 font-medium text-gray-300">${index + 1}</td>
             <td class="px-4 py-4 font-medium text-gray-100 whitespace-nowrap">${item.scrip}</td>
             <td class="px-4 py-4 text-gray-400">${item.purchasePrice.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
@@ -474,22 +599,6 @@ function renderHoldingsTable() {
             <td class="px-4 py-4 font-medium ${item.profitOrLossPercent >= 0 ? 'profit' : 'loss'}">${item.profitOrLossPercent.toFixed(2)}%</td>
             <td class="px-4 py-4">${item.currentValue.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
             <td class="px-4 py-4">${item.weight.toFixed(2)}%</td>
-        </tr>
-    `).join('');
-}
-
-function renderActionsTable(filter = 'all') {
-    const tableBody = document.getElementById('actionsTableBody');
-    if (!tableBody) return;
-    const sortedData = [...portfolioData].sort((a,b) => b.currentValue - a.currentValue);
-    const filteredData = filter === 'all' ? sortedData : sortedData.filter(item => item.recommendation === filter);
-    tableBody.innerHTML = filteredData.map(item => `
-        <tr class="border-b border-gray-700 hover:bg-gray-800">
-            <td class="px-6 py-4 font-medium text-gray-100 whitespace-nowrap">${item.scrip}</td>
-            <td class="px-6 py-4">${item.sector}</td>
-            <td class="px-6 py-4 font-medium ${item.profitOrLossPercent >= 0 ? 'profit' : 'loss'}">${item.profitOrLossPercent.toFixed(2)}%</td>
-            <td class="px-6 py-4"><span class="px-2 py-1 text-xs font-semibold rounded-full action-${(item.recommendation || 'hold').toLowerCase()}">${item.recommendation || 'HOLD'}</span></td>
-            <td class="px-6 py-4 text-xs">${item.rationale}</td>
         </tr>
     `).join('');
 }
@@ -507,24 +616,13 @@ function setupAddStockForm() {
         e.preventDefault();
         const scrip = document.getElementById('scrip').value.toUpperCase().trim(), quantity = parseFloat(document.getElementById('shares').value), price = parseFloat(document.getElementById('price').value);
         if (scrip && !isNaN(quantity) && quantity > 0 && !isNaN(price) && price > 0) {
-            portfolioData.push({ scrip, sector: 'Uncategorized', quantity, purchasePrice: price, ltp: price, fiftyTwoWeekHigh: 0, fiftyTwoWeekLow: 0, recommendation: 'HOLD', rationale: 'Newly added stock. Analysis pending.' });
+            portfolioData.push({ scrip, sector: 'Uncategorized', quantity, purchasePrice: price, ltp: price, fiftyTwoWeekHigh: 0, fiftyTwoWeekLow: 0 });
             runAllCalculations();
             e.target.reset();
             document.getElementById('addStockModal').classList.add('hidden');
-        } else { alert('Please fill in all fields with valid numbers.'); }
-    });
-}
-
-function setupTabs() {
-    const tabs = document.getElementById('tabs'), tabContent = document.getElementById('tab-content');
-    tabs.addEventListener('click', (e) => {
-        if (e.target.tagName === 'BUTTON') {
-            const tabName = e.target.dataset.tab;
-            tabs.querySelectorAll('button').forEach(btn => { btn.classList.remove('tab-active'); btn.classList.add('tab-inactive'); });
-            e.target.classList.add('tab-active');
-            e.target.classList.remove('tab-inactive');
-            tabContent.querySelectorAll(':scope > div').forEach(content => content.classList.add('hidden'));
-            document.getElementById(`${tabName}-content`).classList.remove('hidden');
+            showToast(`${scrip} added to portfolio.`, 'success');
+        } else { 
+            showToast('Please fill all fields with valid data.', 'error');
         }
     });
 }
@@ -536,19 +634,6 @@ function setupSorting() {
             sortState.direction = (sortState.column === column && sortState.direction === 'desc') ? 'asc' : 'desc';
             sortState.column = column;
             renderHoldingsTable();
-        });
-    });
-}
-
-function setupFiltering() {
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const filter = button.dataset.filter;
-            filterButtons.forEach(btn => { btn.classList.remove('bg-indigo-500', 'text-white'); btn.classList.add('bg-gray-700', 'text-gray-200'); });
-            button.classList.add('bg-indigo-500', 'text-white');
-            button.classList.remove('bg-gray-700', 'text-gray-200');
-            renderActionsTable(filter);
         });
     });
 }
