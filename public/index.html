@@ -153,6 +153,62 @@
                     </div>
                 </div>
             </section>
+            
+            <!-- Market Summary Section -->
+            <section id="market-summary" class="mb-8">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-semibold text-gray-100">Today's Market Snapshot</h2>
+                    <span id="marketSummaryDate" class="text-sm text-gray-400"></span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    <!-- Turnover -->
+                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-blue-500/20 hover:shadow-lg hover:-translate-y-1">
+                        <div class="bg-blue-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg></div>
+                        <div><p class="text-sm text-gray-400">Turnover</p><p id="marketTurnover" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
+                    </div>
+                    <!-- Traded Shares -->
+                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-green-500/20 hover:shadow-lg hover:-translate-y-1">
+                        <div class="bg-green-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" /></svg></div>
+                        <div><p class="text-sm text-gray-400">Traded Shares</p><p id="marketTradedShares" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
+                    </div>
+                    <!-- Transactions -->
+                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-yellow-500/20 hover:shadow-lg hover:-translate-y-1">
+                        <div class="bg-yellow-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg></div>
+                        <div><p class="text-sm text-gray-400">Transactions</p><p id="marketTransactions" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
+                    </div>
+                    <!-- Scrips Traded -->
+                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-purple-500/20 hover:shadow-lg hover:-translate-y-1">
+                        <div class="bg-purple-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 8v5a2 2 0 002 2h6" /></svg></div>
+                        <div><p class="text-sm text-gray-400">Scrips Traded</p><p id="marketScripsTraded" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
+                    </div>
+                    <!-- Mkt. Cap (Float) -->
+                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-pink-500/20 hover:shadow-lg hover:-translate-y-1">
+                        <div class="bg-pink-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg></div>
+                        <div><p class="text-sm text-gray-400">Mkt. Cap (Float)</p><p id="marketFloatCap" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
+                    </div>
+                    <!-- Mkt. Cap (Total) -->
+                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-red-500/20 hover:shadow-lg hover:-translate-y-1">
+                        <div class="bg-red-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2h10a2 2 0 002-2v-1a2 2 0 012-2h1.945M7.737 16.525l.001-.001M16.263 16.525l.001-.001M12 21a9 9 0 100-18 9 9 0 000 18z" /></svg></div>
+                        <div><p class="text-sm text-gray-400">Mkt. Cap (Total)</p><p id="marketTotalCap" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Visualizations Section -->
+            <section id="visualizations" class="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-8 fade-in">
+                <div class="section p-6 rounded-xl shadow-lg expandable-chart lg:col-span-2" data-chart-name="sector">
+                    <h2 class="text-xl font-semibold text-gray-100 mb-4">Sector Allocation</h2>
+                    <div class="chart-container">
+                        <canvas id="sectorAllocationChart"></canvas>
+                    </div>
+                </div>
+                <div class="section p-6 rounded-xl shadow-lg expandable-chart lg:col-span-3" data-chart-name="pl">
+                    <h2 class="text-xl font-semibold text-gray-100 mb-4">Top/Bottom P/L by Stock</h2>
+                     <div class="chart-container">
+                        <canvas id="plBarChart"></canvas>
+                    </div>
+                </div>
+            </section>
 
             <!-- Tab Navigation -->
             <div class="mb-4 border-b border-gray-700">
@@ -170,13 +226,15 @@
                     <section class="section p-4 sm:p-6 rounded-xl shadow-lg">
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm text-left text-gray-400">
-                                <thead class="text-xs text-gray-400 uppercase bg-gray-700/50">
+                                <thead>
                                     <tr>
                                         <th scope="col" class="px-4 py-3">SN</th>
                                         <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="scrip">Scrip</th>
                                         <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="quantity">Quantity</th>
                                         <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="purchasePrice">Purchase Price</th>
                                         <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="ltp">LTP</th>
+                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="fiftyTwoWeekHigh">52w High</th>
+                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="fiftyTwoWeekLow">52w Low</th>
                                         <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="profitOrLoss">P/L (NPR)</th>
                                         <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="profitOrLossPercent">P/L (%)</th>
                                         <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="currentValue">Current Value</th>
@@ -201,7 +259,7 @@
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm text-left text-gray-400">
-                                <thead class="text-xs text-gray-400 uppercase bg-gray-700/50">
+                                <thead>
                                     <tr>
                                         <th scope="col" class="px-4 py-3">Symbol</th>
                                         <th scope="col" class="px-4 py-3">LTP</th>
@@ -225,7 +283,7 @@
                     <section class="section p-4 sm:p-6 rounded-xl shadow-lg">
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm text-left text-gray-400">
-                                <thead class="text-xs text-gray-400 uppercase bg-gray-700/50">
+                                <thead>
                                     <tr>
                                         <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Symbol">Symbol</th>
                                         <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="LTP">LTP</th>
@@ -235,6 +293,13 @@
                                         <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Prev. Close">Prev. Close</th>
                                         <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Turnover">Turnover</th>
                                         <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Vol">Volume</th>
+                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Diff">Diff</th>
+                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Diff %">Diff %</th>
+                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Range">Range</th>
+                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Range %">Range %</th>
+                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="VWAP">VWAP</th>
+                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="52 Weeks High">52w High</th>
+                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="52 Weeks Low">52w Low</th>
                                         <th scope="col" class="px-4 py-3">Action</th>
                                     </tr>
                                 </thead>
@@ -354,15 +419,20 @@ document.addEventListener('DOMContentLoaded', () => {
     runAllCalculations();
 
     (async () => {
+        showToast("Fetching latest market data...", "info");
+        await fetchMarketSummary();
         await fetchMarketPrices();
         await loadWatchlistFromApi();
+        
         if (portfolioData.length === 0) {
             showToast("Loading default portfolio...", "info");
             await fetchPortfolioData();
         } else {
-            updateDataFromMarketPrices();
+            updatePortfolioPrices();
         }
+        
         runAllCalculations();
+        showToast("Dashboard is up to date!", "success");
     })();
 });
 
@@ -416,6 +486,47 @@ function showToast(message, type = 'info') {
 
 
 // --- API INTERACTIONS ---
+async function fetchMarketSummary() {
+    try {
+        const apiUrl = 'https://nepsefloorsheetapi.onrender.com/api/v1/portfolio/market-summary';
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error(`API Error: ${response.status}`);
+        
+        const data = await response.json();
+
+        // Helper to format large numbers
+        const formatNumber = (num) => {
+            if (num >= 1e11) return (num / 1e11).toFixed(2) + ' Kharba';
+            if (num >= 1e9) return (num / 1e9).toFixed(2) + ' Arba';
+            if (num >= 1e7) return (num / 1e7).toFixed(2) + ' Cr';
+            if (num >= 1e5) return (num / 1e5).toFixed(2) + ' Lakh';
+            return num.toLocaleString('en-IN');
+        };
+        
+        const parseAndFormatCap = (capString) => {
+            if (!capString || typeof capString !== 'string') return 'N/A';
+            const value = parseFloat(capString.replace(/,/g, '')) * 1e6; // Value is in Millions
+            return `NPR ${formatNumber(value)}`;
+        };
+
+        document.getElementById('marketTurnover').textContent = `NPR ${formatNumber(data['Total Turnovers'])}`;
+        document.getElementById('marketTradedShares').textContent = formatNumber(data['Total Traded Shares']);
+        document.getElementById('marketTransactions').textContent = data['Total Transaction'].toLocaleString('en-IN');
+        document.getElementById('marketScripsTraded').textContent = data['Total Scrips Traded'].toLocaleString('en-IN');
+        document.getElementById('marketFloatCap').textContent = parseAndFormatCap(data['Floated Market Cap']);
+        document.getElementById('marketTotalCap').textContent = parseAndFormatCap(data['Total Market Cap']);
+        
+        // Update market summary date
+        if(data.Date) {
+             document.getElementById('marketSummaryDate').textContent = new Date(data.Date).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+        }
+
+    } catch (error) {
+        console.error('Failed to fetch market summary:', error);
+        document.getElementById('market-summary').innerHTML = '<p class="text-center text-red-400">Could not load market summary.</p>';
+    }
+}
+
 async function fetchMarketPrices() {
     try {
         const response = await fetch('https://nepsefloorsheetapi.onrender.com/api/v1/portfolio/prices');
@@ -474,7 +585,7 @@ async function loadWatchlistFromApi() {
             wishlistScripsData = [wishlistScripsData];
         }
 
-        const scripSet = new Set(wishlistScripsData.map(item => item.scrip).filter(Boolean));
+        const scripSet = new Set(wishlistScripsData.map(item => item.Script).filter(Boolean));
         watchlistData = marketPricesData.filter(item => scripSet.has(item.Symbol));
         
         showToast("Loaded watchlist from server.", "success");
@@ -486,7 +597,7 @@ async function loadWatchlistFromApi() {
     }
 }
 
-function updateDataFromMarketPrices() {
+function updatePortfolioPrices() {
     const priceMap = new Map(marketPricesData.map(item => [item.Symbol, item]));
     
     portfolioData.forEach(stock => {
@@ -509,7 +620,7 @@ async function handleSync() {
 
     await fetchMarketPrices();
     await loadWatchlistFromApi();
-    updateDataFromMarketPrices();
+    updatePortfolioPrices();
     runAllCalculations();
     
     showToast('Data synced successfully!', 'success');
@@ -524,7 +635,8 @@ function runAllCalculations() {
     renderHoldingsTable();
     renderWatchlistTable();
     renderMarketPricesTable();
-    // Charts are not rendered by default to avoid performance issues, only on tab switch
+    renderSectorAllocationChart('sectorAllocationChart');
+    renderPlBarChart('plBarChart');
 }
 
 function setupEventListeners() {
@@ -582,6 +694,8 @@ function renderHoldingsTable() {
             <td class="px-4 py-4">${item.quantity.toLocaleString('en-IN')}</td>
             <td class="px-4 py-4">${item.purchasePrice.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
             <td class="px-4 py-4">${item.ltp.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+            <td class="px-4 py-4 text-green-400">${item.fiftyTwoWeekHigh > 0 ? item.fiftyTwoWeekHigh.toLocaleString('en-IN') : 'N/A'}</td>
+            <td class="px-4 py-4 text-red-400">${item.fiftyTwoWeekLow > 0 ? item.fiftyTwoWeekLow.toLocaleString('en-IN') : 'N/A'}</td>
             <td class="px-4 py-4 ${item.profitOrLoss >= 0 ? 'profit' : 'loss'}">${item.profitOrLoss.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
             <td class="px-4 py-4 ${item.profitOrLossPercent >= 0 ? 'profit' : 'loss'}">${item.profitOrLossPercent.toFixed(2)}%</td>
             <td class="px-4 py-4">${item.currentValue.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
@@ -631,9 +745,96 @@ function renderMarketPricesTable() {
             <td class="px-4 py-4">${item['Prev. Close'].toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
             <td class="px-4 py-4">${item.Turnover.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
             <td class="px-4 py-4">${item.Vol.toLocaleString('en-IN')}</td>
+            <td class="px-4 py-4">${item.Diff.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+            <td class="px-4 py-4">${item['Diff %'].toFixed(2)}%</td>
+            <td class="px-4 py-4">${item.Range.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+            <td class="px-4 py-4">${item['Range %'].toFixed(2)}%</td>
+            <td class="px-4 py-4">${item.VWAP.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+            <td class="px-4 py-4 text-green-400">${item['52 Weeks High'].toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+            <td class="px-4 py-4 text-red-400">${item['52 Weeks Low'].toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
             <td class="px-4 py-4">${actionButton}</td>
         </tr>
     `}).join('');
+}
+
+function renderSectorAllocationChart(canvasId) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    const sectorData = portfolioData.reduce((acc, stock) => {
+        const sector = stock.sector || 'Uncategorized';
+        acc[sector] = (acc[sector] || 0) + stock.currentValue;
+        return acc;
+    }, {});
+    if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
+    chartInstances[canvasId] = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(sectorData),
+            datasets: [{
+                label: 'Portfolio Allocation',
+                data: Object.values(sectorData),
+                backgroundColor: ['#3b82f6', '#10b981', '#ef4444', '#f97316', '#8b5cf6', '#d946ef', '#ec4899', '#64748b', '#f59e0b', '#14b8a6'],
+                borderColor: '#1f2937',
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom', labels: { color: '#d1d5db', boxWidth: 12, padding: 20 } } }
+        }
+    });
+}
+
+function renderPlBarChart(canvasId, showAll = false) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    const sortedByPl = [...portfolioData].sort((a, b) => a.profitOrLoss - b.profitOrLoss);
+    
+    let dataToShow = sortedByPl;
+    if (!showAll && sortedByPl.length > 15) {
+        const losers = sortedByPl.slice(0, 7);
+        const winners = sortedByPl.slice(-8);
+        dataToShow = [...losers, ...winners].sort((a, b) => a.profitOrLoss - b.profitOrLoss);
+    }
+
+    if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
+    chartInstances[canvasId] = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: dataToShow.map(s => s.scrip),
+            datasets: [{
+                label: 'Profit/Loss (NPR)',
+                data: dataToShow.map(s => s.profitOrLoss),
+                backgroundColor: dataToShow.map(s => s.profitOrLoss >= 0 ? 'rgba(74, 222, 128, 0.6)' : 'rgba(248, 113, 113, 0.6)'),
+                borderColor: dataToShow.map(s => s.profitOrLoss >= 0 ? '#4ade80' : '#f87171'),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { 
+                x: { 
+                    ticks: { 
+                        color: '#9ca3af',
+                        callback: (value) => (value / 1000).toFixed(1) + 'k' 
+                    },
+                    grid: {
+                        color: '#374151'
+                    }
+                },
+                y: {
+                    ticks: {
+                        color: '#d1d5db'
+                    },
+                     grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
 }
 
 // --- EVENT LISTENER SETUP ---
@@ -658,7 +859,7 @@ function setupAddStockForm() {
         if (scrip && !isNaN(quantity) && quantity > 0 && !isNaN(price) && price > 0) {
             portfolioData.push({ scrip, sector: 'Uncategorized', quantity, purchasePrice: price, ltp: price, fiftyTwoWeekHigh: 0, fiftyTwoWeekLow: 0 });
             savePortfolioToLocalStorage();
-            updateDataFromMarketPrices();
+            updatePortfolioPrices();
             runAllCalculations();
             e.target.reset();
             document.getElementById('addStockModal').classList.add('hidden');
