@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive NEPSE Portfolio Dashboard with P/L Tracking (Dark Mode)</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💹</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -336,7 +337,6 @@ let portfolioData = [];
 let watchlistData = [];
 let marketPricesData = [];
 const PORTFOLIO_STORAGE_KEY = 'nepsePortfolio';
-const WATCHLIST_STORAGE_KEY = 'nepseWatchlist';
 let portfolioSortState = { column: 'currentValue', direction: 'desc' };
 let marketSortState = { column: 'Turnover', direction: 'desc' };
 let chartInstances = {};
@@ -351,16 +351,15 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
 
     loadPortfolioFromLocalStorage();
-    loadWatchlistFromLocalStorage();
     runAllCalculations();
 
     (async () => {
-        await fetchMarketPrices(); // Fetch market prices first
+        await fetchMarketPrices();
+        await loadWatchlistFromApi();
         if (portfolioData.length === 0) {
             showToast("Loading default portfolio...", "info");
             await fetchPortfolioData();
         } else {
-            // Update existing data with new prices
             updateDataFromMarketPrices();
         }
         runAllCalculations();
@@ -378,17 +377,6 @@ function loadPortfolioFromLocalStorage() {
     if (saved) {
         portfolioData = JSON.parse(saved);
         showToast("Loaded portfolio from local storage.", "success");
-    }
-}
-
-function saveWatchlistToLocalStorage() {
-    localStorage.setItem(WATCHLIST_STORAGE_KEY, JSON.stringify(watchlistData));
-}
-
-function loadWatchlistFromLocalStorage() {
-    const saved = localStorage.getItem(WATCHLIST_STORAGE_KEY);
-    if (saved) {
-        watchlistData = JSON.parse(saved);
     }
 }
 
@@ -476,10 +464,32 @@ async function fetchPortfolioData() {
     }
 }
 
+async function loadWatchlistFromApi() {
+    try {
+        const response = await fetch('https://nepsefloorsheetapi.onrender.com/api/v1/portfolio/wishlist');
+        if (!response.ok) throw new Error(`API Error: ${response.status}`);
+        let wishlistScripsData = await response.json();
+
+        if (!Array.isArray(wishlistScripsData)) {
+            wishlistScripsData = [wishlistScripsData];
+        }
+
+        const scripSet = new Set(wishlistScripsData.map(item => item.scrip).filter(Boolean));
+        watchlistData = marketPricesData.filter(item => scripSet.has(item.Symbol));
+        
+        showToast("Loaded watchlist from server.", "success");
+
+    } catch (error) {
+        console.error('Failed to load watchlist from API:', error);
+        showToast('Could not load watchlist.', 'error');
+        watchlistData = [];
+    }
+}
+
 function updateDataFromMarketPrices() {
     const priceMap = new Map(marketPricesData.map(item => [item.Symbol, item]));
     
-    [...portfolioData, ...watchlistData].forEach(stock => {
+    portfolioData.forEach(stock => {
         if (priceMap.has(stock.scrip)) {
             const marketData = priceMap.get(stock.scrip);
             stock.ltp = marketData.LTP;
@@ -489,7 +499,6 @@ function updateDataFromMarketPrices() {
     });
 
     savePortfolioToLocalStorage();
-    saveWatchlistToLocalStorage();
 }
 
 async function handleSync() {
@@ -499,6 +508,7 @@ async function handleSync() {
     showToast('Syncing latest data...', 'info');
 
     await fetchMarketPrices();
+    await loadWatchlistFromApi();
     updateDataFromMarketPrices();
     runAllCalculations();
     
@@ -659,12 +669,12 @@ function setupAddStockForm() {
     });
 }
 
-function setupAddWatchlistForm() {
-    document.getElementById('addWatchlistForm').addEventListener('submit', (e) => {
+async function setupAddWatchlistForm() {
+    document.getElementById('addWatchlistForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const scrip = document.getElementById('watchlistScrip').value.toUpperCase().trim();
         if (scrip) {
-            addToWatchlistFromMarket(scrip); // Reuse the same logic
+            await addToWatchlistFromMarket(scrip); // Reuse the same logic
             e.target.reset();
             document.getElementById('addWatchlistModal').classList.add('hidden');
         } else { 
@@ -673,30 +683,49 @@ function setupAddWatchlistForm() {
     });
 }
 
-function addToWatchlistFromMarket(scrip) {
+async function addToWatchlistFromMarket(scrip) {
     if (watchlistData.some(item => item.Symbol === scrip)) {
         showToast(`${scrip} is already in your watchlist.`, 'info');
         return;
     }
 
-    const stockData = marketPricesData.find(item => item.Symbol === scrip);
-    if (stockData) {
-        watchlistData.push(stockData);
-        saveWatchlistToLocalStorage();
-        renderWatchlistTable();
-        renderMarketPricesTable(); // Re-render to update button state
-        showToast(`${scrip} added to watchlist.`, 'success');
-    } else {
-        showToast(`${scrip} not found in market data.`, 'error');
+    try {
+        const response = await fetch('https://nepsefloorsheetapi.onrender.com/api/v1/portfolio/wishlist/add', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ scrip: scrip }),
+        });
+        if (!response.ok) throw new Error(`API Error: ${response.status}`);
+        
+        const stockData = marketPricesData.find(item => item.Symbol === scrip);
+        if (stockData) {
+            watchlistData.push(stockData);
+            runAllCalculations();
+            showToast(`${scrip} added to watchlist.`, 'success');
+        }
+    } catch (error) {
+        console.error('Failed to add to watchlist:', error);
+        showToast(`Could not add ${scrip} to watchlist.`, 'error');
     }
 }
 
 
-function removeFromWatchlist(scrip) {
-    watchlistData = watchlistData.filter(item => item.Symbol !== scrip);
-    saveWatchlistToLocalStorage();
-    runAllCalculations();
-    showToast(`${scrip} removed from watchlist.`, 'success');
+async function removeFromWatchlist(scrip) {
+    try {
+        const response = await fetch('https://nepsefloorsheetapi.onrender.com/api/v1/portfolio/wishlist/remove', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ scrip: scrip }),
+        });
+        if (!response.ok) throw new Error(`API Error: ${response.status}`);
+        
+        watchlistData = watchlistData.filter(item => item.Symbol !== scrip);
+        runAllCalculations();
+        showToast(`${scrip} removed from watchlist.`, 'success');
+    } catch (error) {
+        console.error('Failed to remove from watchlist:', error);
+        showToast(`Could not remove ${scrip} from watchlist.`, 'error');
+    }
 }
 
 function setupSorting() {
