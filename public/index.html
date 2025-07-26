@@ -185,6 +185,7 @@
                             <tr>
                                 <th scope="col" class="px-4 py-3">SN</th>
                                 <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="scrip">Scrip</th>
+                                <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="quantity">Quantity</th>
                                 <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="purchasePrice">Purchase Price</th>
                                 <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="ltp">LTP</th>
                                 <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="fiftyTwoWeekHigh">52w High</th>
@@ -263,22 +264,66 @@
 
 <script>
 // --- DATA STORE & STATE ---
-let portfolioData = []; // Data will be fetched from API
+let portfolioData = []; // Data will be fetched from API or local storage
+const PORTFOLIO_STORAGE_KEY = 'nepsePortfolio';
 let sortState = { column: 'currentValue', direction: 'desc' };
 let chartInstances = {};
 let toastTimeout;
 
 // --- INITIALIZATION ---
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
+    // Initial synchronous setup
     Chart.defaults.color = '#9ca3af';
     Chart.defaults.borderColor = '#374151';
-
     setDashboardDate();
-    await fetchMarketSummary(); // Fetch market summary
-    await fetchPortfolioData(); // Fetch initial portfolio from summary API
-    runAllCalculations(); // Initial calculation and render
     setupEventListeners();
+
+    // 1. Immediately load from local storage and render the UI
+    loadPortfolioFromLocalStorage();
+    runAllCalculations(); // Render with whatever is in local storage (even if empty)
+
+    // 2. Asynchronously fetch fresh data in the background
+    (async () => {
+        // Fetch market summary concurrently
+        fetchMarketSummary(); 
+
+        // Check if we need to fetch the initial portfolio or just sync prices
+        if (portfolioData.length === 0) {
+            // This is a first-time visit or cleared storage
+            showToast("Loading default portfolio...", "info");
+            await fetchPortfolioData(); // Fetches the initial list and saves it
+            runAllCalculations(); // Re-render with the newly fetched default data
+        } else {
+            // We have data from storage, so just sync prices silently
+            await fetchLtpFromApi(false); // false = no alerts for background sync
+        }
+    })();
 });
+
+
+// --- LOCAL STORAGE ---
+function savePortfolioToLocalStorage() {
+    try {
+        localStorage.setItem(PORTFOLIO_STORAGE_KEY, JSON.stringify(portfolioData));
+    } catch (e) {
+        console.error("Failed to save portfolio to local storage:", e);
+        showToast("Could not save portfolio.", "error");
+    }
+}
+
+function loadPortfolioFromLocalStorage() {
+    const savedPortfolio = localStorage.getItem(PORTFOLIO_STORAGE_KEY);
+    if (savedPortfolio) {
+        try {
+            portfolioData = JSON.parse(savedPortfolio);
+            showToast("Loaded portfolio from local storage.", "success");
+        } catch (e) {
+            console.error("Failed to parse portfolio from local storage:", e);
+            portfolioData = []; // Ensure data is clean if parsing fails
+            localStorage.removeItem(PORTFOLIO_STORAGE_KEY); // Clear corrupt data
+        }
+    }
+}
 
 // --- UI FUNCTIONS ---
 function showToast(message, type = 'info') {
@@ -359,8 +404,6 @@ async function fetchMarketSummary() {
 
 
 async function fetchPortfolioData() {
-    const syncBtn = document.getElementById('syncLtpBtn');
-    syncBtn.disabled = true; // Disable button during initial load
     try {
         const apiUrl = 'https://nepsefloorsheetapi.onrender.com/api/v1/portfolio/summary';
         const response = await fetch(apiUrl);
@@ -380,12 +423,11 @@ async function fetchPortfolioData() {
                 sector: item.Sector || 'Uncategorized', 
             };
         });
+        savePortfolioToLocalStorage(); // Save fetched data
         
     } catch (error) {
         console.error('Failed to fetch portfolio summary:', error);
-        showToast('Could not fetch portfolio data.', 'error');
-    } finally {
-        syncBtn.disabled = false; // Re-enable button after load
+        showToast('Could not fetch default portfolio data.', 'error');
     }
 }
 
@@ -400,22 +442,26 @@ async function fetchLtpFromApi(showAlerts = true) {
     if(showAlerts) showToast('Syncing latest prices...', 'info');
 
     try {
-        const apiUrl = 'https://nepsefloorsheetapi.onrender.com/api/v1/share-prices';
+        // Re-fetch market summary along with prices
+        await fetchMarketSummary();
+
+        const apiUrl = 'https://nepsefloorsheetapi.onrender.com/api/v1/portfolio/summary';
         const response = await fetch(apiUrl);
         
         if (!response.ok) throw new Error(`API Error: ${response.status}`);
         const apiData = await response.json();
         if (!Array.isArray(apiData) || apiData.length === 0) {
-            if (showAlerts) showToast("No data from API. Using last known values.", "info");
+            if (showAlerts) showToast("No price data from API. Using last known values.", "info");
             return;
         }
         const priceMap = new Map();
         apiData.forEach(item => {
-            if (item.Symbol) {
-                priceMap.set(item.Symbol, {
+            if (item.Script) {
+                const [high, low] = String(item['52 week high/low']).split(' / ').map(val => parseFloat(val.replace(/,/g, '')));
+                priceMap.set(item.Script, {
                     ltp: parseFloat(String(item.LTP).replace(/,/g, '')),
-                    high: parseFloat(String(item['52 Weeks High']).replace(/,/g, '')),
-                    low: parseFloat(String(item['52 Weeks Low']).replace(/,/g, ''))
+                    high: high || 0,
+                    low: low || 0
                 });
             }
         });
@@ -430,6 +476,7 @@ async function fetchLtpFromApi(showAlerts = true) {
             }
         });
         if (showAlerts) showToast(updatedCount > 0 ? `${updatedCount} stocks updated.` : "No matching stocks found to update.", "success");
+        savePortfolioToLocalStorage(); // Save updated data
     } catch (error) {
         console.error('Failed to fetch live prices:', error);
         if (showAlerts) showToast(`Could not fetch live prices.`, "error");
@@ -591,6 +638,7 @@ function renderHoldingsTable() {
         <tr class="border-b border-gray-700 hover:bg-gray-800/50">
             <td class="px-4 py-4 font-medium text-gray-300">${index + 1}</td>
             <td class="px-4 py-4 font-medium text-gray-100 whitespace-nowrap">${item.scrip}</td>
+            <td class="px-4 py-4">${item.quantity.toLocaleString('en-IN')}</td>
             <td class="px-4 py-4 text-gray-400">${item.purchasePrice.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
             <td class="px-4 py-4">${item.ltp.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
             <td class="px-4 py-4 text-green-400">${item.fiftyTwoWeekHigh > 0 ? item.fiftyTwoWeekHigh.toLocaleString('en-IN') : 'N/A'}</td>
@@ -617,6 +665,7 @@ function setupAddStockForm() {
         const scrip = document.getElementById('scrip').value.toUpperCase().trim(), quantity = parseFloat(document.getElementById('shares').value), price = parseFloat(document.getElementById('price').value);
         if (scrip && !isNaN(quantity) && quantity > 0 && !isNaN(price) && price > 0) {
             portfolioData.push({ scrip, sector: 'Uncategorized', quantity, purchasePrice: price, ltp: price, fiftyTwoWeekHigh: 0, fiftyTwoWeekLow: 0 });
+            savePortfolioToLocalStorage();
             runAllCalculations();
             e.target.reset();
             document.getElementById('addStockModal').classList.add('hidden');
