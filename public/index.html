@@ -35,12 +35,17 @@
         .expandable-chart:hover {
             transform: scale(1.02);
         }
-        .table-header-sortable {
+        .table-header-sortable, .market-header-sortable {
             cursor: pointer;
             transition: color 0.2s;
         }
-        .table-header-sortable:hover {
+        .table-header-sortable:hover, .market-header-sortable:hover {
             color: #818cf8; /* Brighter Indigo on hover */
+        }
+        .sort-indicator, .sort-indicator-market {
+            display: inline-block;
+            width: 1em;
+            color: #818cf8;
         }
         .profit { color: #4ade80; } /* Brighter Green for profit */
         .loss { color: #f87171; } /* Brighter Red for loss */
@@ -131,27 +136,27 @@
             <!-- Portfolio Performance Metrics -->
             <section id="metrics" class="mb-8">
                  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <!-- Total Portfolio Value -->
-                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-indigo-500/20 hover:shadow-lg hover:-translate-y-1">
-                        <div class="bg-indigo-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg></div>
-                        <div><p class="text-sm text-gray-400">Portfolio Value</p><p id="totalValue" class="font-bold text-gray-100 text-xl">N/A</p></div>
-                    </div>
-                     <!-- Total Investment -->
-                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-cyan-500/20 hover:shadow-lg hover:-translate-y-1">
-                        <div class="bg-cyan-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
-                        <div><p class="text-sm text-gray-400">Total Investment</p><p id="totalInvestment" class="font-bold text-gray-100 text-xl">N/A</p></div>
-                    </div>
-                     <!-- Total Profit/Loss -->
-                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-gray-500/20 hover:shadow-lg hover:-translate-y-1">
-                        <div id="totalPLIconContainer" class="bg-gray-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h5M20 20v-5h-5M4 20L20 4" /></svg></div>
-                        <div><p class="text-sm text-gray-400">Total P/L</p><p id="totalPL" class="font-bold text-xl">N/A</p></div>
-                    </div>
-                     <!-- Portfolio Return % -->
-                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-gray-500/20 hover:shadow-lg hover:-translate-y-1">
-                        <div id="portfolioReturnIconContainer" class="bg-gray-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
-                        <div><p class="text-sm text-gray-400">Portfolio Return</p><p id="portfolioReturn" class="font-bold text-xl">N/A</p></div>
-                    </div>
-                </div>
+                     <!-- Total Portfolio Value -->
+                     <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-indigo-500/20 hover:shadow-lg hover:-translate-y-1">
+                         <div class="bg-indigo-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg></div>
+                         <div><p class="text-sm text-gray-400">Portfolio Value</p><p id="totalValue" class="font-bold text-gray-100 text-xl">N/A</p></div>
+                     </div>
+                      <!-- Total Investment -->
+                     <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-cyan-500/20 hover:shadow-lg hover:-translate-y-1">
+                         <div class="bg-cyan-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
+                         <div><p class="text-sm text-gray-400">Total Investment</p><p id="totalInvestment" class="font-bold text-gray-100 text-xl">N/A</p></div>
+                     </div>
+                      <!-- Total Profit/Loss -->
+                     <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-gray-500/20 hover:shadow-lg hover:-translate-y-1">
+                         <div id="totalPLIconContainer" class="bg-gray-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h5M20 20v-5h-5M4 20L20 4" /></svg></div>
+                         <div><p class="text-sm text-gray-400">Total P/L</p><p id="totalPL" class="font-bold text-xl">N/A</p></div>
+                     </div>
+                      <!-- Portfolio Return % -->
+                     <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-gray-500/20 hover:shadow-lg hover:-translate-y-1">
+                         <div id="portfolioReturnIconContainer" class="bg-gray-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
+                         <div><p class="text-sm text-gray-400">Portfolio Return</p><p id="portfolioReturn" class="font-bold text-xl">N/A</p></div>
+                     </div>
+                 </div>
             </section>
             
             <!-- Market Summary Section -->
@@ -229,16 +234,16 @@
                                 <thead>
                                     <tr>
                                         <th scope="col" class="px-4 py-3">SN</th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="scrip">Scrip</th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="quantity">Quantity</th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="purchasePrice">Purchase Price</th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="ltp">LTP</th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="fiftyTwoWeekHigh">52w High</th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="fiftyTwoWeekLow">52w Low</th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="profitOrLoss">P/L (NPR)</th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="profitOrLossPercent">P/L (%)</th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="currentValue">Current Value</th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="weight">Weight (%)</th>
+                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="scrip">Scrip<span class="sort-indicator"></span></th>
+                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="quantity">Quantity<span class="sort-indicator"></span></th>
+                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="purchasePrice">Purchase Price<span class="sort-indicator"></span></th>
+                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="ltp">LTP<span class="sort-indicator"></span></th>
+                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="fiftyTwoWeekHigh">52w High<span class="sort-indicator"></span></th>
+                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="fiftyTwoWeekLow">52w Low<span class="sort-indicator"></span></th>
+                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="profitOrLoss">P/L (NPR)<span class="sort-indicator"></span></th>
+                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="profitOrLossPercent">P/L (%)<span class="sort-indicator"></span></th>
+                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="currentValue">Current Value<span class="sort-indicator"></span></th>
+                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="weight">Weight (%)<span class="sort-indicator"></span></th>
                                     </tr>
                                 </thead>
                                 <tbody id="holdingsTableBody"></tbody>
@@ -281,25 +286,28 @@
                 <!-- Market Prices Panel -->
                 <div id="prices-panel" class="tab-panel hidden">
                     <section class="section p-4 sm:p-6 rounded-xl shadow-lg">
+                        <div class="mb-4">
+                            <input type="text" id="marketSearchInput" placeholder="Search by Symbol..." class="w-full sm:w-1/3 px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm text-left text-gray-400">
                                 <thead>
                                     <tr>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Symbol">Symbol</th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="LTP">LTP</th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="High">High</th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Low">Low</th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Open">Open</th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Prev. Close">Prev. Close</th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Turnover">Turnover</th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Vol">Volume</th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Diff">Diff</th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Diff %">Diff %</th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Range">Range</th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Range %">Range %</th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="VWAP">VWAP</th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="52 Weeks High">52w High</th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="52 Weeks Low">52w Low</th>
+                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Symbol">Symbol<span class="sort-indicator-market"></span></th>
+                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="LTP">LTP<span class="sort-indicator-market"></span></th>
+                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="High">High<span class="sort-indicator-market"></span></th>
+                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Low">Low<span class="sort-indicator-market"></span></th>
+                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Open">Open<span class="sort-indicator-market"></span></th>
+                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Prev. Close">Prev. Close<span class="sort-indicator-market"></span></th>
+                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Turnover">Turnover<span class="sort-indicator-market"></span></th>
+                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Vol">Volume<span class="sort-indicator-market"></span></th>
+                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Diff">Diff<span class="sort-indicator-market"></span></th>
+                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Diff %">Diff %<span class="sort-indicator-market"></span></th>
+                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Range">Range<span class="sort-indicator-market"></span></th>
+                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Range %">Range %<span class="sort-indicator-market"></span></th>
+                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="VWAP">VWAP<span class="sort-indicator-market"></span></th>
+                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="52 Weeks High">52w High<span class="sort-indicator-market"></span></th>
+                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="52 Weeks Low">52w Low<span class="sort-indicator-market"></span></th>
                                         <th scope="col" class="px-4 py-3">Action</th>
                                     </tr>
                                 </thead>
@@ -637,6 +645,8 @@ function runAllCalculations() {
     renderMarketPricesTable();
     renderSectorAllocationChart('sectorAllocationChart');
     renderPlBarChart('plBarChart');
+    updateSortIndicators('portfolio');
+    updateSortIndicators('market');
 }
 
 function setupEventListeners() {
@@ -649,6 +659,7 @@ function setupEventListeners() {
     setupChartExpansion();
     setupTabs();
     setupSearchableDropdown();
+    setupMarketSearch();
 }
 
 function calculatePortfolioMetrics() {
@@ -725,7 +736,18 @@ function renderWatchlistTable() {
 function renderMarketPricesTable() {
     const tableBody = document.getElementById('marketPricesTableBody');
     if (!tableBody) return;
-    const sortedData = [...marketPricesData].sort((a, b) => {
+
+    const searchInput = document.getElementById('marketSearchInput');
+    const searchTerm = searchInput ? searchInput.value.toUpperCase().trim() : '';
+    
+    let filteredData = marketPricesData;
+    if (searchTerm) {
+        filteredData = marketPricesData.filter(item => 
+            item.Symbol.toUpperCase().includes(searchTerm)
+        );
+    }
+
+    const sortedData = [...filteredData].sort((a, b) => {
         const valA = a[marketSortState.column], valB = b[marketSortState.column];
         return marketSortState.direction === 'asc' ? (valA > valB ? 1 : -1) : (valB > valA ? 1 : -1);
     });
@@ -933,18 +955,60 @@ function setupSorting() {
     document.querySelectorAll('.table-header-sortable').forEach(header => {
         header.addEventListener('click', () => {
             const column = header.dataset.sort;
-            portfolioSortState.direction = (portfolioSortState.column === column && portfolioSortState.direction === 'desc') ? 'asc' : 'desc';
-            portfolioSortState.column = column;
+            if (portfolioSortState.column === column) {
+                portfolioSortState.direction = portfolioSortState.direction === 'desc' ? 'asc' : 'desc';
+            } else {
+                portfolioSortState.column = column;
+                portfolioSortState.direction = 'desc';
+            }
+            updateSortIndicators('portfolio');
             renderHoldingsTable();
         });
     });
     document.querySelectorAll('.market-header-sortable').forEach(header => {
         header.addEventListener('click', () => {
             const column = header.dataset.sort;
-            marketSortState.direction = (marketSortState.column === column && marketSortState.direction === 'desc') ? 'asc' : 'desc';
-            marketSortState.column = column;
+            if (marketSortState.column === column) {
+                marketSortState.direction = marketSortState.direction === 'desc' ? 'asc' : 'desc';
+            } else {
+                marketSortState.column = column;
+                marketSortState.direction = 'desc';
+            }
+            updateSortIndicators('market');
             renderMarketPricesTable();
         });
+    });
+}
+
+function updateSortIndicators(tableType) {
+    if (tableType === 'portfolio') {
+        const state = portfolioSortState;
+        document.querySelectorAll('.table-header-sortable').forEach(header => {
+            const indicator = header.querySelector('.sort-indicator');
+            if (indicator) {
+                indicator.textContent = header.dataset.sort === state.column 
+                    ? (state.direction === 'desc' ? ' ▼' : ' ▲') 
+                    : '';
+            }
+        });
+    } else if (tableType === 'market') {
+        const state = marketSortState;
+        document.querySelectorAll('.market-header-sortable').forEach(header => {
+            const indicator = header.querySelector('.sort-indicator-market');
+            if (indicator) {
+                indicator.textContent = header.dataset.sort === state.column 
+                    ? (state.direction === 'desc' ? ' ▼' : ' ▲') 
+                    : '';
+            }
+        });
+    }
+}
+
+
+function setupMarketSearch() {
+    const searchInput = document.getElementById('marketSearchInput');
+    searchInput.addEventListener('input', () => {
+        renderMarketPricesTable();
     });
 }
 
@@ -982,8 +1046,47 @@ function setupSearchableDropdown() {
 }
 
 function setupChartExpansion() {
-    // ... (This function can remain as is)
+    const modal = document.getElementById('chartModal');
+    const modalTitle = document.getElementById('chartModalTitle');
+    const modalContainer = document.getElementById('chartModalContainer');
+    const closeBtn = document.getElementById('closeChartModalBtn');
+    const modalCanvasId = 'modal-chart-canvas';
+
+    const closeModal = () => {
+        modal.classList.add('hidden');
+        if (chartInstances[modalCanvasId]) {
+            chartInstances[modalCanvasId].destroy();
+            delete chartInstances[modalCanvasId];
+        }
+        modalContainer.innerHTML = ''; // Clear the container
+    };
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    document.querySelectorAll('.expandable-chart').forEach(chartCard => {
+        chartCard.addEventListener('click', () => {
+            const chartName = chartCard.dataset.chartName;
+            
+            modalContainer.innerHTML = `<canvas id="${modalCanvasId}"></canvas>`;
+
+            if (chartName === 'sector') {
+                modalTitle.textContent = 'Expanded Sector Allocation';
+                renderSectorAllocationChart(modalCanvasId); 
+            } else if (chartName === 'pl') {
+                modalTitle.textContent = 'Full Profit/Loss View';
+                renderPlBarChart(modalCanvasId, true); 
+            }
+            
+            modal.classList.remove('hidden');
+        });
+    });
 }
+
 
 function setupTabs() {
     const tabs = document.querySelectorAll('.tab-link');
