@@ -136,27 +136,50 @@
             <!-- Portfolio Performance Metrics -->
             <section id="metrics" class="mb-8">
                  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                     <!-- Total Portfolio Value -->
-                     <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-indigo-500/20 hover:shadow-lg hover:-translate-y-1">
-                         <div class="bg-indigo-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg></div>
-                         <div><p class="text-sm text-gray-400">Portfolio Value</p><p id="totalValue" class="font-bold text-gray-100 text-xl">N/A</p></div>
-                     </div>
-                      <!-- Total Investment -->
-                     <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-cyan-500/20 hover:shadow-lg hover:-translate-y-1">
-                         <div class="bg-cyan-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
-                         <div><p class="text-sm text-gray-400">Total Investment</p><p id="totalInvestment" class="font-bold text-gray-100 text-xl">N/A</p></div>
-                     </div>
-                      <!-- Total Profit/Loss -->
-                     <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-gray-500/20 hover:shadow-lg hover:-translate-y-1">
-                         <div id="totalPLIconContainer" class="bg-gray-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h5M20 20v-5h-5M4 20L20 4" /></svg></div>
-                         <div><p class="text-sm text-gray-400">Total P/L</p><p id="totalPL" class="font-bold text-xl">N/A</p></div>
-                     </div>
-                      <!-- Portfolio Return % -->
-                     <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-gray-500/20 hover:shadow-lg hover:-translate-y-1">
-                         <div id="portfolioReturnIconContainer" class="bg-gray-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
-                         <div><p class="text-sm text-gray-400">Portfolio Return</p><p id="portfolioReturn" class="font-bold text-xl">N/A</p></div>
-                     </div>
+                      <!-- Total Portfolio Value -->
+                      <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-indigo-500/20 hover:shadow-lg hover:-translate-y-1">
+                          <div class="bg-indigo-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg></div>
+                          <div><p class="text-sm text-gray-400">Portfolio Value</p><p id="totalValue" class="font-bold text-gray-100 text-xl">N/A</p></div>
+                      </div>
+                       <!-- Total Investment -->
+                      <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-cyan-500/20 hover:shadow-lg hover:-translate-y-1">
+                          <div class="bg-cyan-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
+                          <div><p class="text-sm text-gray-400">Total Investment</p><p id="totalInvestment" class="font-bold text-gray-100 text-xl">N/A</p></div>
+                      </div>
+                       <!-- Total Profit/Loss -->
+                      <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-gray-500/20 hover:shadow-lg hover:-translate-y-1">
+                          <div id="totalPLIconContainer" class="bg-gray-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h5M20 20v-5h-5M4 20L20 4" /></svg></div>
+                          <div><p class="text-sm text-gray-400">Total P/L</p><p id="totalPL" class="font-bold text-xl">N/A</p></div>
+                      </div>
+                       <!-- Portfolio Return % -->
+                      <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-gray-500/20 hover:shadow-lg hover:-translate-y-1">
+                          <div id="portfolioReturnIconContainer" class="bg-gray-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
+                          <div><p class="text-sm text-gray-400">Portfolio Return</p><p id="portfolioReturn" class="font-bold text-xl">N/A</p></div>
+                      </div>
                  </div>
+            </section>
+
+             <!-- Realized Gain/Loss Summary -->
+            <section id="realized-summary" class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-100 mb-4">Realized Gain/Loss Summary</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-teal-500/20 hover:shadow-lg hover:-translate-y-1">
+                        <div class="bg-teal-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01" /></svg></div>
+                        <div><p class="text-sm text-gray-400">Total Realized P/L</p><p id="totalRealizedPL" class="font-bold text-xl">N/A</p></div>
+                    </div>
+                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-green-500/20 hover:shadow-lg hover:-translate-y-1">
+                        <div class="bg-green-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg></div>
+                        <div><p class="text-sm text-gray-400">Total Sell Value</p><p id="totalSellValue" class="font-bold text-gray-100 text-xl">N/A</p></div>
+                    </div>
+                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-red-500/20 hover:shadow-lg hover:-translate-y-1">
+                        <div class="bg-red-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg></div>
+                        <div><p class="text-sm text-gray-400">Total Purchase Value</p><p id="totalPurchaseValue" class="font-bold text-gray-100 text-xl">N/A</p></div>
+                    </div>
+                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-purple-500/20 hover:shadow-lg hover:-translate-y-1">
+                        <div class="bg-purple-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
+                        <div><p class="text-sm text-gray-400">Overall Return %</p><p id="overallReturn" class="font-bold text-xl">N/A</p></div>
+                    </div>
+                </div>
             </section>
             
             <!-- Market Summary Section -->
@@ -200,17 +223,23 @@
             </section>
             
             <!-- Visualizations Section -->
-            <section id="visualizations" class="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-8 fade-in">
-                <div class="section p-6 rounded-xl shadow-lg expandable-chart lg:col-span-2" data-chart-name="sector">
+            <section id="visualizations" class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 fade-in">
+                <div class="section p-6 rounded-xl shadow-lg expandable-chart" data-chart-name="sector">
                     <h2 class="text-xl font-semibold text-gray-100 mb-4">Sector Allocation</h2>
                     <div class="chart-container">
                         <canvas id="sectorAllocationChart"></canvas>
                     </div>
                 </div>
-                <div class="section p-6 rounded-xl shadow-lg expandable-chart lg:col-span-3" data-chart-name="pl">
+                <div class="section p-6 rounded-xl shadow-lg expandable-chart" data-chart-name="pl">
                     <h2 class="text-xl font-semibold text-gray-100 mb-4">Top/Bottom P/L by Stock</h2>
                      <div class="chart-container">
                         <canvas id="plBarChart"></canvas>
+                    </div>
+                </div>
+                <div class="section p-6 rounded-xl shadow-lg expandable-chart lg:col-span-2" data-chart-name="realized-trend">
+                    <h2 class="text-xl font-semibold text-gray-100 mb-4">Monthly Realized P/L Trend</h2>
+                    <div class="chart-container">
+                        <canvas id="monthlyRealizedGainChart"></canvas>
                     </div>
                 </div>
             </section>
@@ -221,6 +250,7 @@
                     <button class="tab-link active py-2 px-4 font-medium text-gray-300 rounded-t-lg" data-tab="portfolio">Portfolio Holdings</button>
                     <button class="tab-link py-2 px-4 font-medium text-gray-300 rounded-t-lg" data-tab="watchlist">Watchlist</button>
                     <button class="tab-link py-2 px-4 font-medium text-gray-300 rounded-t-lg" data-tab="prices">Market Prices</button>
+                    <button class="tab-link py-2 px-4 font-medium text-gray-300 rounded-t-lg" data-tab="realized">Realized Gain</button>
                 </nav>
             </div>
 
@@ -316,6 +346,35 @@
                         </div>
                     </section>
                 </div>
+                
+                <!-- Realized Gain Panel -->
+                <div id="realized-panel" class="tab-panel hidden">
+                    <section class="section p-4 sm:p-6 rounded-xl shadow-lg">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-semibold text-gray-100">Realized Gain/Loss</h2>
+                            <button id="openRealizedGainModalBtn" class="bg-teal-600 text-white font-semibold py-2 px-3 rounded-lg hover:bg-teal-700 transition-colors flex items-center gap-2 text-sm">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
+                                <span>Add Realized Gain</span>
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left text-gray-400">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="px-4 py-3">Scrip</th>
+                                        <th scope="col" class="px-4 py-3">Quantity</th>
+                                        <th scope="col" class="px-4 py-3">Purchase Price</th>
+                                        <th scope="col" class="px-4 py-3">Sell Price</th>
+                                        <th scope="col" class="px-4 py-3">Sell Date</th>
+                                        <th scope="col" class="px-4 py-3">Profit/Loss</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="realizedGainTableBody"></tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+
             </div>
         </main>
         
@@ -381,6 +440,48 @@
         </div>
     </div>
 
+    <!-- Add Realized Gain Modal -->
+    <div id="addRealizedGainModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center hidden z-50">
+        <div class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-md border border-gray-700">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-100">Add Realized Gain</h2>
+                <button id="closeRealizedGainModalBtn" class="text-gray-400 hover:text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+            </div>
+            <form id="addRealizedGainForm">
+                <div class="space-y-4">
+                    <div>
+                        <label for="realizedScrip" class="block text-sm font-medium text-gray-300 mb-1">Scrip (Ticker)</label>
+                        <div class="search-dropdown">
+                            <input type="text" id="realizedScrip" name="realizedScrip" placeholder="e.g., NABIL" required autocomplete="off" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                            <div id="realizedGainOptions" class="search-dropdown-options hidden"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="realizedQuantity" class="block text-sm font-medium text-gray-300 mb-1">Quantity</label>
+                        <input type="number" id="realizedQuantity" name="realizedQuantity" placeholder="e.g., 10" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                    </div>
+                    <div>
+                        <label for="realizedPurchasePrice" class="block text-sm font-medium text-gray-300 mb-1">Purchase Price</label>
+                        <input type="number" id="realizedPurchasePrice" name="realizedPurchasePrice" step="0.01" placeholder="e.g., 350" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                    </div>
+                    <div>
+                        <label for="realizedSellPrice" class="block text-sm font-medium text-gray-300 mb-1">Sell Price</label>
+                        <input type="number" id="realizedSellPrice" name="realizedSellPrice" step="0.01" placeholder="e.g., 400" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                    </div>
+                    <div>
+                        <label for="realizedSellDate" class="block text-sm font-medium text-gray-300 mb-1">Sell Date</label>
+                        <input type="date" id="realizedSellDate" name="realizedSellDate" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                    </div>
+                </div>
+                <div class="mt-8">
+                    <button type="submit" class="w-full bg-teal-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-teal-700 transition-colors">Add Transaction</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 
     <!-- Chart Expansion Modal -->
     <div id="chartModal" class="fixed inset-0 bg-gray-900 bg-opacity-80 flex items-center justify-center hidden z-50 p-4">
@@ -409,6 +510,7 @@
 let portfolioData = [];
 let watchlistData = [];
 let marketPricesData = [];
+let realizedGainData = [];
 const PORTFOLIO_STORAGE_KEY = 'nepsePortfolio';
 let portfolioSortState = { column: 'currentValue', direction: 'desc' };
 let marketSortState = { column: 'Turnover', direction: 'desc' };
@@ -431,6 +533,7 @@ document.addEventListener('DOMContentLoaded', () => {
         await fetchMarketSummary();
         await fetchMarketPrices();
         await loadWatchlistFromApi();
+        await fetchRealizedGain();
         
         if (portfolioData.length === 0) {
             showToast("Loading default portfolio...", "info");
@@ -605,6 +708,37 @@ async function loadWatchlistFromApi() {
     }
 }
 
+async function fetchRealizedGain() {
+    try {
+        const response = await fetch('https://nepsefloorsheetapi.onrender.com/api/v1/portfolio/realized-gain');
+        if (!response.ok) throw new Error(`API Error: ${response.status}`);
+        const data = await response.json();
+        if (Array.isArray(data)) {
+            realizedGainData = data.map(apiItem => {
+                const purchaseValue = Number(apiItem["Purchase Value"]) || 0;
+                const quantitySold = Number(apiItem["Quantity Sold"]) || 1; // Avoid division by zero
+                return {
+                    scrip: apiItem.Scrip,
+                    quantity: quantitySold,
+                    purchase_price: purchaseValue / quantitySold, 
+                    sell_price: Number(apiItem["Sell Price"]) || 0,
+                    sell_date: apiItem.Date,
+                    profit_loss: Number(apiItem["Gain Amount"]) || 0 
+                };
+            });
+        } else {
+            realizedGainData = [];
+        }
+        renderRealizedGainTable();
+    } catch (error) {
+        console.error('Failed to fetch realized gain data:', error);
+        showToast('Could not fetch realized gain data.', 'error');
+        realizedGainData = []; // Reset on error
+        renderRealizedGainTable(); // Render empty state
+    }
+}
+
+
 function updatePortfolioPrices() {
     const priceMap = new Map(marketPricesData.map(item => [item.Symbol, item]));
     
@@ -628,6 +762,7 @@ async function handleSync() {
 
     await fetchMarketPrices();
     await loadWatchlistFromApi();
+    await fetchRealizedGain();
     updatePortfolioPrices();
     runAllCalculations();
     
@@ -640,11 +775,14 @@ async function handleSync() {
 // --- CORE FUNCTIONS ---
 function runAllCalculations() {
     calculatePortfolioMetrics();
+    calculateRealizedGainSummary();
     renderHoldingsTable();
     renderWatchlistTable();
     renderMarketPricesTable();
+    renderRealizedGainTable();
     renderSectorAllocationChart('sectorAllocationChart');
     renderPlBarChart('plBarChart');
+    renderMonthlyRealizedGainChart('monthlyRealizedGainChart');
     updateSortIndicators('portfolio');
     updateSortIndicators('market');
 }
@@ -654,12 +792,15 @@ function setupEventListeners() {
     setupSorting();
     setupModal();
     setupWatchlistModal();
+    setupRealizedGainModal();
     setupAddStockForm();
     setupAddWatchlistForm();
+    setupAddRealizedGainForm();
     setupChartExpansion();
     setupTabs();
     setupSearchableDropdown();
     setupMarketSearch();
+    setupRealizedGainDropdown();
 }
 
 function calculatePortfolioMetrics() {
@@ -689,6 +830,26 @@ function calculatePortfolioMetrics() {
     portfolioReturnElement.textContent = `${portfolioReturn.toFixed(2)}%`;
     portfolioReturnElement.className = `font-bold text-xl ${portfolioReturn >= 0 ? 'profit' : 'loss'}`;
 }
+
+function calculateRealizedGainSummary() {
+    const summary = realizedGainData.reduce((acc, item) => {
+        acc.totalSellValue += item.sell_price * item.quantity;
+        acc.totalPurchaseValue += item.purchase_price * item.quantity;
+        acc.totalRealizedPL += item.profit_loss;
+        return acc;
+    }, { totalSellValue: 0, totalPurchaseValue: 0, totalRealizedPL: 0 });
+
+    const overallReturn = summary.totalPurchaseValue > 0 ? (summary.totalRealizedPL / summary.totalPurchaseValue) * 100 : 0;
+
+    document.getElementById('totalRealizedPL').textContent = `NPR ${summary.totalRealizedPL.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    document.getElementById('totalSellValue').textContent = `NPR ${summary.totalSellValue.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    document.getElementById('totalPurchaseValue').textContent = `NPR ${summary.totalPurchaseValue.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    document.getElementById('overallReturn').textContent = `${overallReturn.toFixed(2)}%`;
+
+    document.getElementById('totalRealizedPL').className = `font-bold text-xl ${summary.totalRealizedPL >= 0 ? 'profit' : 'loss'}`;
+    document.getElementById('overallReturn').className = `font-bold text-xl ${overallReturn >= 0 ? 'profit' : 'loss'}`;
+}
+
 
 // --- TABLE RENDERING ---
 function renderHoldingsTable() {
@@ -779,6 +940,37 @@ function renderMarketPricesTable() {
     `}).join('');
 }
 
+function renderRealizedGainTable() {
+    const tableBody = document.getElementById('realizedGainTableBody');
+    if (!tableBody) return;
+
+    if (!Array.isArray(realizedGainData) || realizedGainData.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-gray-500">No realized gain data available.</td></tr>';
+        return;
+    }
+
+    tableBody.innerHTML = realizedGainData.map(item => {
+        const quantity = Number(item.quantity) || 0;
+        const purchasePrice = Number(item.purchase_price) || 0;
+        const sellPrice = Number(item.sell_price) || 0;
+        const sellDate = item.sell_date ? new Date(item.sell_date).toLocaleDateString('en-CA') : 'N/A';
+        const scrip = item.scrip || 'N/A';
+        const profitLoss = Number(item.profit_loss) || 0;
+        
+        return `
+            <tr class="border-b border-gray-700 hover:bg-gray-800/50">
+                <td class="px-4 py-4 font-medium">${scrip}</td>
+                <td class="px-4 py-4">${quantity.toLocaleString('en-IN')}</td>
+                <td class="px-4 py-4">${purchasePrice.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+                <td class="px-4 py-4">${sellPrice.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+                <td class="px-4 py-4">${sellDate}</td>
+                <td class="px-4 py-4 ${profitLoss >= 0 ? 'profit' : 'loss'}">${profitLoss.toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+            </tr>
+        `
+    }).join('');
+}
+
+
 function renderSectorAllocationChart(canvasId) {
     const ctx = document.getElementById(canvasId).getContext('2d');
     const sectorData = portfolioData.reduce((acc, stock) => {
@@ -859,6 +1051,48 @@ function renderPlBarChart(canvasId, showAll = false) {
     });
 }
 
+function renderMonthlyRealizedGainChart(canvasId) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    const monthlyData = realizedGainData.reduce((acc, item) => {
+        const month = new Date(item.sell_date).toLocaleString('default', { month: 'short', year: '2-digit' });
+        acc[month] = (acc[month] || 0) + item.profit_loss;
+        return acc;
+    }, {});
+
+    const sortedMonths = Object.keys(monthlyData).sort((a, b) => {
+        const [monthA, yearA] = a.split(' ');
+        const [monthB, yearB] = b.split(' ');
+        const dateA = new Date(`01 ${monthA} 20${yearA}`);
+        const dateB = new Date(`01 ${monthB} 20${yearB}`);
+        return dateA - dateB;
+    });
+
+    if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
+    chartInstances[canvasId] = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: sortedMonths,
+            datasets: [{
+                label: 'Monthly Realized P/L',
+                data: sortedMonths.map(month => monthlyData[month]),
+                backgroundColor: sortedMonths.map(month => monthlyData[month] >= 0 ? 'rgba(74, 222, 128, 0.6)' : 'rgba(248, 113, 113, 0.6)'),
+                borderColor: sortedMonths.map(month => monthlyData[month] >= 0 ? '#4ade80' : '#f87171'),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { ticks: { color: '#d1d5db' }, grid: { color: '#374151' } },
+                y: { ticks: { color: '#d1d5db', callback: (value) => (value / 1000).toFixed(1) + 'k' }, grid: { color: '#374151' } }
+            }
+        }
+    });
+}
+
+
 // --- EVENT LISTENER SETUP ---
 function setupModal() {
     const modal = document.getElementById('addStockModal'), openBtn = document.getElementById('openModalBtn'), closeBtn = document.getElementById('closeModalBtn');
@@ -873,6 +1107,22 @@ function setupWatchlistModal() {
     closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
     window.addEventListener('click', (event) => { if (event.target === modal) modal.classList.add('hidden'); });
 }
+
+function setupRealizedGainModal() {
+    const modal = document.getElementById('addRealizedGainModal');
+    const openBtn = document.getElementById('openRealizedGainModalBtn');
+    const closeBtn = document.getElementById('closeRealizedGainModalBtn');
+    const dateInput = document.getElementById('realizedSellDate');
+
+    openBtn.addEventListener('click', () => {
+        // Set today's date as default
+        dateInput.value = new Date().toISOString().split('T')[0];
+        modal.classList.remove('hidden');
+    });
+    closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+    window.addEventListener('click', (event) => { if (event.target === modal) modal.classList.add('hidden'); });
+}
+
 
 function setupAddStockForm() {
     document.getElementById('addStockForm').addEventListener('submit', (e) => {
@@ -905,6 +1155,39 @@ async function setupAddWatchlistForm() {
         }
     });
 }
+
+async function setupAddRealizedGainForm() {
+    document.getElementById('addRealizedGainForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const scrip = document.getElementById('realizedScrip').value.toUpperCase().trim();
+        const quantity = parseFloat(document.getElementById('realizedQuantity').value);
+        const purchase_price = parseFloat(document.getElementById('realizedPurchasePrice').value);
+        const sell_price = parseFloat(document.getElementById('realizedSellPrice').value);
+        const sell_date = document.getElementById('realizedSellDate').value;
+
+        if (scrip && quantity > 0 && purchase_price > 0 && sell_price > 0 && sell_date) {
+            const payload = { scrip, quantity, purchase_price, sell_price, sell_date };
+            try {
+                const response = await fetch('https://nepsefloorsheetapi.onrender.com/api/v1/portfolio/realized-gain', {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
+                if (!response.ok) throw new Error(`API Error: ${response.status}`);
+                await fetchRealizedGain(); // Refresh the table
+                e.target.reset();
+                document.getElementById('addRealizedGainModal').classList.add('hidden');
+                showToast('Realized gain added successfully!', 'success');
+            } catch (error) {
+                console.error('Failed to add realized gain:', error);
+                showToast('Could not add realized gain.', 'error');
+            }
+        } else {
+            showToast('Please fill all fields with valid data.', 'error');
+        }
+    });
+}
+
 
 async function addToWatchlistFromMarket(scrip) {
     if (watchlistData.some(item => item.Symbol === scrip)) {
@@ -1044,6 +1327,52 @@ function setupSearchableDropdown() {
         }
     });
 }
+
+function setupRealizedGainDropdown() {
+    const searchInput = document.getElementById('realizedScrip');
+    const optionsContainer = document.getElementById('realizedGainOptions');
+    const purchasePriceInput = document.getElementById('realizedPurchasePrice');
+
+    // Populate options
+    optionsContainer.innerHTML = ALL_STOCKS.map(stock => `<div class="search-dropdown-option" data-value="${stock}">${stock}</div>`).join('');
+
+    // Show/hide on focus/blur
+    searchInput.addEventListener('focus', () => optionsContainer.classList.remove('hidden'));
+    document.addEventListener('click', (e) => {
+        if (!searchInput.contains(e.target) && !optionsContainer.contains(e.target)) {
+            optionsContainer.classList.add('hidden');
+        }
+    });
+
+    // Filter on input
+    searchInput.addEventListener('input', () => {
+        const filter = searchInput.value.toUpperCase();
+        optionsContainer.querySelectorAll('.search-dropdown-option').forEach(option => {
+            const value = option.getAttribute('data-value');
+            option.style.display = value.toUpperCase().includes(filter) ? '' : 'none';
+        });
+        // Clear purchase price if user types manually
+        purchasePriceInput.value = '';
+    });
+
+    // Handle selection
+    optionsContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('search-dropdown-option')) {
+            const selectedScrip = e.target.getAttribute('data-value');
+            searchInput.value = selectedScrip;
+            optionsContainer.classList.add('hidden');
+
+            // Auto-populate purchase price
+            const holding = portfolioData.find(stock => stock.scrip === selectedScrip);
+            if (holding) {
+                purchasePriceInput.value = holding.purchasePrice.toFixed(2);
+            } else {
+                purchasePriceInput.value = ''; // Clear if not in portfolio
+            }
+        }
+    });
+}
+
 
 function setupChartExpansion() {
     const modal = document.getElementById('chartModal');
