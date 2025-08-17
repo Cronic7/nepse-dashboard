@@ -111,389 +111,440 @@
         .search-dropdown-option:hover {
             background-color: #4b5563;
         }
+
+        /* Shake animation for login error */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        .animate-shake {
+            animation: shake 0.5s ease-in-out;
+        }
     </style>
 </head>
 <body class="antialiased">
-    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
-        <header class="mb-8 flex flex-wrap justify-between items-center gap-4">
-            <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-gray-100">NEPSE Portfolio Analysis</h1>
-                <p id="dashboardDate" class="text-gray-400 mt-1">Interactive Dashboard</p>
-            </div>
-            <div class="flex items-center gap-2 sm:gap-4">
-                <button id="syncLtpBtn" class="bg-green-600 text-white font-semibold py-2 px-3 sm:px-4 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2 disabled:bg-green-800 disabled:cursor-not-allowed text-sm sm:text-base">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 110 2H4a1 1 0 01-1-1V4a1 1 0 011-1zm10.899 12.101a7.002 7.002 0 01-11.601-2.566 1 1 0 011.885-.666A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101z" clip-rule="evenodd" /></svg>
-                    <span id="syncBtnText">Sync</span>
-                </button>
-                <button id="openModalBtn" class="bg-indigo-600 text-white font-semibold py-2 px-3 sm:px-4 rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-2 text-sm sm:text-base">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
-                    <span>Add Stock</span>
-                </button>
-            </div>
-        </header>
 
-        <main>
-            <!-- Portfolio Performance Metrics -->
-            <section id="metrics" class="mb-8">
-                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                      <!-- Total Portfolio Value -->
-                      <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-indigo-500/20 hover:shadow-lg hover:-translate-y-1">
-                          <div class="bg-indigo-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg></div>
-                          <div><p class="text-sm text-gray-400">Portfolio Value</p><p id="totalValue" class="font-bold text-gray-100 text-xl">N/A</p></div>
-                      </div>
-                       <!-- Total Investment -->
-                      <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-cyan-500/20 hover:shadow-lg hover:-translate-y-1">
-                          <div class="bg-cyan-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
-                          <div><p class="text-sm text-gray-400">Total Investment</p><p id="totalInvestment" class="font-bold text-gray-100 text-xl">N/A</p></div>
-                      </div>
-                       <!-- Total Profit/Loss -->
-                      <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-gray-500/20 hover:shadow-lg hover:-translate-y-1">
-                          <div id="totalPLIconContainer" class="bg-gray-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h5M20 20v-5h-5M4 20L20 4" /></svg></div>
-                          <div><p class="text-sm text-gray-400">Total P/L</p><p id="totalPL" class="font-bold text-xl">N/A</p></div>
-                      </div>
-                       <!-- Portfolio Return % -->
-                      <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-gray-500/20 hover:shadow-lg hover:-translate-y-1">
-                          <div id="portfolioReturnIconContainer" class="bg-gray-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
-                          <div><p class="text-sm text-gray-400">Portfolio Return</p><p id="portfolioReturn" class="font-bold text-xl">N/A</p></div>
-                      </div>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="fixed inset-0 bg-gradient-to-br from-gray-900 via-gray-900 to-indigo-900 flex items-center justify-center transition-opacity duration-500 ease-in-out p-4 z-50">
+        <div id="loginCard" class="bg-gray-800/50 backdrop-blur-xl p-8 rounded-2xl shadow-2xl text-center w-full max-w-sm border border-gray-700
+                               transform transition-all duration-500 ease-in-out opacity-0 scale-95">
+            <div class="mx-auto mb-6 h-16 w-16 flex items-center justify-center bg-indigo-500/10 rounded-full border border-indigo-500/30">
+                <svg class="h-8 w-8 text-indigo-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 00-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-white mb-4">Secure Access</h2>
+            <p class="text-gray-400 mb-6">Enter your password to continue.</p>
+            <div class="relative mb-4">
+                 <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                    <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" />
+                    </svg>
                  </div>
-            </section>
-
-             <!-- Realized Gain/Loss Summary -->
-            <section id="realized-summary" class="mb-8">
-                <h2 class="text-xl font-semibold text-gray-100 mb-4">Realized Gain/Loss Summary</h2>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-teal-500/20 hover:shadow-lg hover:-translate-y-1">
-                        <div class="bg-teal-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01" /></svg></div>
-                        <div><p class="text-sm text-gray-400">Total Realized P/L</p><p id="totalRealizedPL" class="font-bold text-xl">N/A</p></div>
-                    </div>
-                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-green-500/20 hover:shadow-lg hover:-translate-y-1">
-                        <div class="bg-green-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg></div>
-                        <div><p class="text-sm text-gray-400">Total Sell Value</p><p id="totalSellValue" class="font-bold text-gray-100 text-xl">N/A</p></div>
-                    </div>
-                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-red-500/20 hover:shadow-lg hover:-translate-y-1">
-                        <div class="bg-red-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg></div>
-                        <div><p class="text-sm text-gray-400">Total Purchase Value</p><p id="totalPurchaseValue" class="font-bold text-gray-100 text-xl">N/A</p></div>
-                    </div>
-                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-purple-500/20 hover:shadow-lg hover:-translate-y-1">
-                        <div class="bg-purple-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
-                        <div><p class="text-sm text-gray-400">Overall Return %</p><p id="overallReturn" class="font-bold text-xl">N/A</p></div>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- Market Summary Section -->
-            <section id="market-summary" class="mb-8">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-semibold text-gray-100">Today's Market Snapshot</h2>
-                    <span id="marketSummaryDate" class="text-sm text-gray-400"></span>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                    <!-- Turnover -->
-                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-blue-500/20 hover:shadow-lg hover:-translate-y-1">
-                        <div class="bg-blue-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg></div>
-                        <div><p class="text-sm text-gray-400">Turnover</p><p id="marketTurnover" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
-                    </div>
-                    <!-- Traded Shares -->
-                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-green-500/20 hover:shadow-lg hover:-translate-y-1">
-                        <div class="bg-green-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" /></svg></div>
-                        <div><p class="text-sm text-gray-400">Traded Shares</p><p id="marketTradedShares" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
-                    </div>
-                    <!-- Transactions -->
-                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-yellow-500/20 hover:shadow-lg hover:-translate-y-1">
-                        <div class="bg-yellow-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg></div>
-                        <div><p class="text-sm text-gray-400">Transactions</p><p id="marketTransactions" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
-                    </div>
-                    <!-- Scrips Traded -->
-                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-purple-500/20 hover:shadow-lg hover:-translate-y-1">
-                        <div class="bg-purple-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 8v5a2 2 0 002 2h6" /></svg></div>
-                        <div><p class="text-sm text-gray-400">Scrips Traded</p><p id="marketScripsTraded" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
-                    </div>
-                    <!-- Mkt. Cap (Float) -->
-                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-pink-500/20 hover:shadow-lg hover:-translate-y-1">
-                        <div class="bg-pink-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg></div>
-                        <div><p class="text-sm text-gray-400">Mkt. Cap (Float)</p><p id="marketFloatCap" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
-                    </div>
-                    <!-- Mkt. Cap (Total) -->
-                    <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-red-500/20 hover:shadow-lg hover:-translate-y-1">
-                        <div class="bg-red-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2h10a2 2 0 002-2v-1a2 2 0 012-2h1.945M7.737 16.525l.001-.001M16.263 16.525l.001-.001M12 21a9 9 0 100-18 9 9 0 000 18z" /></svg></div>
-                        <div><p class="text-sm text-gray-400">Mkt. Cap (Total)</p><p id="marketTotalCap" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- Visualizations Section -->
-            <section id="visualizations" class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 fade-in">
-                <div class="section p-6 rounded-xl shadow-lg expandable-chart" data-chart-name="sector">
-                    <h2 class="text-xl font-semibold text-gray-100 mb-4">Sector Allocation</h2>
-                    <div class="chart-container">
-                        <canvas id="sectorAllocationChart"></canvas>
-                    </div>
-                </div>
-                <div class="section p-6 rounded-xl shadow-lg expandable-chart" data-chart-name="pl">
-                    <h2 class="text-xl font-semibold text-gray-100 mb-4">Top/Bottom P/L by Stock</h2>
-                     <div class="chart-container">
-                        <canvas id="plBarChart"></canvas>
-                    </div>
-                </div>
-                <div class="section p-6 rounded-xl shadow-lg expandable-chart lg:col-span-2" data-chart-name="realized-trend">
-                    <h2 class="text-xl font-semibold text-gray-100 mb-4">Monthly Realized P/L Trend</h2>
-                    <div class="chart-container">
-                        <canvas id="monthlyRealizedGainChart"></canvas>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Tab Navigation -->
-            <div class="mb-4 border-b border-gray-700">
-                <nav class="flex space-x-4" aria-label="Tabs">
-                    <button class="tab-link active py-2 px-4 font-medium text-gray-300 rounded-t-lg" data-tab="portfolio">Portfolio Holdings</button>
-                    <button class="tab-link py-2 px-4 font-medium text-gray-300 rounded-t-lg" data-tab="watchlist">Watchlist</button>
-                    <button class="tab-link py-2 px-4 font-medium text-gray-300 rounded-t-lg" data-tab="prices">Market Prices</button>
-                    <button class="tab-link py-2 px-4 font-medium text-gray-300 rounded-t-lg" data-tab="realized">Realized Gain</button>
-                </nav>
+                 <input id="passwordInput" type="password" placeholder="Enter Password"
+                        class="w-full p-3 pl-10 rounded-lg bg-gray-700/50 text-white border border-gray-600 
+                               outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-300">
             </div>
+            <button id="loginButton"
+                    class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-lg font-semibold
+                           transition-all duration-300 ease-in-out flex items-center justify-center
+                           focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-indigo-500
+                           active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed">
+                <span id="buttonText">Login</span>
+                <svg id="spinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+            </button>
+            <p id="loginError" class="text-red-400 text-sm mt-4 transition-all duration-300 opacity-0 transform -translate-y-2 h-4">
+                Incorrect password. Please try again.
+            </p>
+        </div>
+    </div>
 
-            <!-- Tab Content -->
-            <div id="tab-content">
-                <!-- Portfolio Holdings Panel -->
-                <div id="portfolio-panel" class="tab-panel">
-                    <section class="section p-4 sm:p-6 rounded-xl shadow-lg">
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left text-gray-400">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" class="px-4 py-3">SN</th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="scrip">Scrip<span class="sort-indicator"></span></th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="quantity">Quantity<span class="sort-indicator"></span></th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="purchasePrice">Purchase Price<span class="sort-indicator"></span></th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="ltp">LTP<span class="sort-indicator"></span></th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="fiftyTwoWeekHigh">52w High<span class="sort-indicator"></span></th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="fiftyTwoWeekLow">52w Low<span class="sort-indicator"></span></th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="profitOrLoss">P/L (NPR)<span class="sort-indicator"></span></th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="profitOrLossPercent">P/L (%)<span class="sort-indicator"></span></th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="currentValue">Current Value<span class="sort-indicator"></span></th>
-                                        <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="weight">Weight (%)<span class="sort-indicator"></span></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="holdingsTableBody"></tbody>
-                            </table>
-                        </div>
-                    </section>
+    <!-- Main Dashboard Content (Initially Hidden) -->
+    <div id="mainDashboard" class="hidden">
+        <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+            <header class="mb-8 flex flex-wrap justify-between items-center gap-4">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-100">NEPSE Portfolio Analysis</h1>
+                    <p id="dashboardDate" class="text-gray-400 mt-1">Interactive Dashboard</p>
                 </div>
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <button id="syncLtpBtn" class="bg-green-600 text-white font-semibold py-2 px-3 sm:px-4 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2 disabled:bg-green-800 disabled:cursor-not-allowed text-sm sm:text-base">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 110 2H4a1 1 0 01-1-1V4a1 1 0 011-1zm10.899 12.101a7.002 7.002 0 01-11.601-2.566 1 1 0 011.885-.666A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101z" clip-rule="evenodd" /></svg>
+                        <span id="syncBtnText">Sync</span>
+                    </button>
+                    <button id="openModalBtn" class="bg-indigo-600 text-white font-semibold py-2 px-3 sm:px-4 rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-2 text-sm sm:text-base">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
+                        <span>Add Stock</span>
+                    </button>
+                </div>
+            </header>
 
-                <!-- Watchlist Panel -->
-                <div id="watchlist-panel" class="tab-panel hidden">
-                    <section class="section p-4 sm:p-6 rounded-xl shadow-lg">
-                         <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-semibold text-gray-100">My Watchlist</h2>
-                            <button id="openWatchlistModalBtn" class="bg-blue-600 text-white font-semibold py-2 px-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 text-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
-                                <span>Add to Watchlist</span>
-                            </button>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left text-gray-400">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" class="px-4 py-3">Symbol</th>
-                                        <th scope="col" class="px-4 py-3">LTP</th>
-                                        <th scope="col" class="px-4 py-3">High</th>
-                                        <th scope="col" class="px-4 py-3">Low</th>
-                                        <th scope="col" class="px-4 py-3">Open</th>
-                                        <th scope="col" class="px-4 py-3">Prev. Close</th>
-                                        <th scope="col" class="px-4 py-3">Turnover</th>
-                                        <th scope="col" class="px-4 py-3">Volume</th>
-                                        <th scope="col" class="px-4 py-3">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="watchlistTableBody"></tbody>
-                            </table>
-                        </div>
-                    </section>
-                </div>
+            <main>
+                <!-- Portfolio Performance Metrics -->
+                <section id="metrics" class="mb-8">
+                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                           <!-- Total Portfolio Value -->
+                           <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-indigo-500/20 hover:shadow-lg hover:-translate-y-1">
+                                 <div class="bg-indigo-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg></div>
+                                 <div><p class="text-sm text-gray-400">Portfolio Value</p><p id="totalValue" class="font-bold text-gray-100 text-xl">N/A</p></div>
+                           </div>
+                            <!-- Total Investment -->
+                           <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-cyan-500/20 hover:shadow-lg hover:-translate-y-1">
+                                 <div class="bg-cyan-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
+                                 <div><p class="text-sm text-gray-400">Total Investment</p><p id="totalInvestment" class="font-bold text-gray-100 text-xl">N/A</p></div>
+                           </div>
+                            <!-- Total Profit/Loss -->
+                           <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-gray-500/20 hover:shadow-lg hover:-translate-y-1">
+                                 <div id="totalPLIconContainer" class="bg-gray-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h5M20 20v-5h-5M4 20L20 4" /></svg></div>
+                                 <div><p class="text-sm text-gray-400">Total P/L</p><p id="totalPL" class="font-bold text-xl">N/A</p></div>
+                           </div>
+                            <!-- Portfolio Return % -->
+                           <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-gray-500/20 hover:shadow-lg hover:-translate-y-1">
+                                 <div id="portfolioReturnIconContainer" class="bg-gray-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
+                                 <div><p class="text-sm text-gray-400">Portfolio Return</p><p id="portfolioReturn" class="font-bold text-xl">N/A</p></div>
+                           </div>
+                      </div>
+                </section>
 
-                <!-- Market Prices Panel -->
-                <div id="prices-panel" class="tab-panel hidden">
-                    <section class="section p-4 sm:p-6 rounded-xl shadow-lg">
-                        <div class="mb-4">
-                            <input type="text" id="marketSearchInput" placeholder="Search by Symbol..." class="w-full sm:w-1/3 px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                 <!-- Realized Gain/Loss Summary -->
+                <section id="realized-summary" class="mb-8">
+                    <h2 class="text-xl font-semibold text-gray-100 mb-4">Realized Gain/Loss Summary</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-teal-500/20 hover:shadow-lg hover:-translate-y-1">
+                            <div class="bg-teal-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01" /></svg></div>
+                            <div><p class="text-sm text-gray-400">Total Realized P/L</p><p id="totalRealizedPL" class="font-bold text-xl">N/A</p></div>
                         </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left text-gray-400">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Symbol">Symbol<span class="sort-indicator-market"></span></th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="LTP">LTP<span class="sort-indicator-market"></span></th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="High">High<span class="sort-indicator-market"></span></th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Low">Low<span class="sort-indicator-market"></span></th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Open">Open<span class="sort-indicator-market"></span></th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Prev. Close">Prev. Close<span class="sort-indicator-market"></span></th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Turnover">Turnover<span class="sort-indicator-market"></span></th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Vol">Volume<span class="sort-indicator-market"></span></th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Diff">Diff<span class="sort-indicator-market"></span></th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Diff %">Diff %<span class="sort-indicator-market"></span></th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Range">Range<span class="sort-indicator-market"></span></th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Range %">Range %<span class="sort-indicator-market"></span></th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="VWAP">VWAP<span class="sort-indicator-market"></span></th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="52 Weeks High">52w High<span class="sort-indicator-market"></span></th>
-                                        <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="52 Weeks Low">52w Low<span class="sort-indicator-market"></span></th>
-                                        <th scope="col" class="px-4 py-3">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="marketPricesTableBody"></tbody>
-                            </table>
+                        <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-green-500/20 hover:shadow-lg hover:-translate-y-1">
+                            <div class="bg-green-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg></div>
+                            <div><p class="text-sm text-gray-400">Total Sell Value</p><p id="totalSellValue" class="font-bold text-gray-100 text-xl">N/A</p></div>
                         </div>
-                    </section>
-                </div>
+                        <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-red-500/20 hover:shadow-lg hover:-translate-y-1">
+                            <div class="bg-red-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg></div>
+                            <div><p class="text-sm text-gray-400">Total Purchase Value</p><p id="totalPurchaseValue" class="font-bold text-gray-100 text-xl">N/A</p></div>
+                        </div>
+                        <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-purple-500/20 hover:shadow-lg hover:-translate-y-1">
+                            <div class="bg-purple-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
+                            <div><p class="text-sm text-gray-400">Overall Return %</p><p id="overallReturn" class="font-bold text-xl">N/A</p></div>
+                        </div>
+                    </div>
+                </section>
                 
-                <!-- Realized Gain Panel -->
-                <div id="realized-panel" class="tab-panel hidden">
-                    <section class="section p-4 sm:p-6 rounded-xl shadow-lg">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-semibold text-gray-100">Realized Gain/Loss</h2>
-                            <button id="openRealizedGainModalBtn" class="bg-teal-600 text-white font-semibold py-2 px-3 rounded-lg hover:bg-teal-700 transition-colors flex items-center gap-2 text-sm">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
-                                <span>Add Realized Gain</span>
-                            </button>
+                <!-- Market Summary Section -->
+                <section id="market-summary" class="mb-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold text-gray-100">Today's Market Snapshot</h2>
+                        <span id="marketSummaryDate" class="text-sm text-gray-400"></span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                        <!-- Turnover -->
+                        <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-blue-500/20 hover:shadow-lg hover:-translate-y-1">
+                            <div class="bg-blue-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg></div>
+                            <div><p class="text-sm text-gray-400">Turnover</p><p id="marketTurnover" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
                         </div>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-sm text-left text-gray-400">
-                                <thead>
-                                    <tr>
-                                        <th scope="col" class="px-4 py-3">Scrip</th>
-                                        <th scope="col" class="px-4 py-3">Quantity</th>
-                                        <th scope="col" class="px-4 py-3">Purchase Price</th>
-                                        <th scope="col" class="px-4 py-3">Sell Price</th>
-                                        <th scope="col" class="px-4 py-3">Sell Date</th>
-                                        <th scope="col" class="px-4 py-3">Profit/Loss</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="realizedGainTableBody"></tbody>
-                            </table>
+                        <!-- Traded Shares -->
+                        <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-green-500/20 hover:shadow-lg hover:-translate-y-1">
+                            <div class="bg-green-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" /></svg></div>
+                            <div><p class="text-sm text-gray-400">Traded Shares</p><p id="marketTradedShares" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
                         </div>
-                    </section>
+                        <!-- Transactions -->
+                        <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-yellow-500/20 hover:shadow-lg hover:-translate-y-1">
+                            <div class="bg-yellow-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg></div>
+                            <div><p class="text-sm text-gray-400">Transactions</p><p id="marketTransactions" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
+                        </div>
+                        <!-- Scrips Traded -->
+                        <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-purple-500/20 hover:shadow-lg hover:-translate-y-1">
+                            <div class="bg-purple-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 8v5a2 2 0 002 2h6" /></svg></div>
+                            <div><p class="text-sm text-gray-400">Scrips Traded</p><p id="marketScripsTraded" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
+                        </div>
+                        <!-- Mkt. Cap (Float) -->
+                        <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-pink-500/20 hover:shadow-lg hover:-translate-y-1">
+                            <div class="bg-pink-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-pink-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg></div>
+                            <div><p class="text-sm text-gray-400">Mkt. Cap (Float)</p><p id="marketFloatCap" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
+                        </div>
+                        <!-- Mkt. Cap (Total) -->
+                        <div class="card p-4 rounded-xl flex items-center gap-4 transition-all hover:shadow-red-500/20 hover:shadow-lg hover:-translate-y-1">
+                            <div class="bg-red-500/10 p-3 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2h10a2 2 0 002-2v-1a2 2 0 012-2h1.945M7.737 16.525l.001-.001M16.263 16.525l.001-.001M12 21a9 9 0 100-18 9 9 0 000 18z" /></svg></div>
+                            <div><p class="text-sm text-gray-400">Mkt. Cap (Total)</p><p id="marketTotalCap" class="font-bold text-gray-100 text-base sm:text-lg">N/A</p></div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Visualizations Section -->
+                <section id="visualizations" class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8 fade-in">
+                    <div class="section p-6 rounded-xl shadow-lg expandable-chart" data-chart-name="sector">
+                        <h2 class="text-xl font-semibold text-gray-100 mb-4">Sector Allocation</h2>
+                        <div class="chart-container">
+                            <canvas id="sectorAllocationChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="section p-6 rounded-xl shadow-lg expandable-chart" data-chart-name="pl">
+                        <h2 class="text-xl font-semibold text-gray-100 mb-4">Top/Bottom P/L by Stock</h2>
+                         <div class="chart-container">
+                            <canvas id="plBarChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="section p-6 rounded-xl shadow-lg expandable-chart lg:col-span-2" data-chart-name="realized-trend">
+                        <h2 class="text-xl font-semibold text-gray-100 mb-4">Monthly Realized P/L Trend</h2>
+                        <div class="chart-container">
+                            <canvas id="monthlyRealizedGainChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tab Navigation -->
+                <div class="mb-4 border-b border-gray-700">
+                    <nav class="flex space-x-4" aria-label="Tabs">
+                        <button class="tab-link active py-2 px-4 font-medium text-gray-300 rounded-t-lg" data-tab="portfolio">Portfolio Holdings</button>
+                        <button class="tab-link py-2 px-4 font-medium text-gray-300 rounded-t-lg" data-tab="watchlist">Watchlist</button>
+                        <button class="tab-link py-2 px-4 font-medium text-gray-300 rounded-t-lg" data-tab="prices">Market Prices</button>
+                        <button class="tab-link py-2 px-4 font-medium text-gray-300 rounded-t-lg" data-tab="realized">Realized Gain</button>
+                    </nav>
                 </div>
 
-            </div>
-        </main>
+                <!-- Tab Content -->
+                <div id="tab-content">
+                    <!-- Portfolio Holdings Panel -->
+                    <div id="portfolio-panel" class="tab-panel">
+                        <section class="section p-4 sm:p-6 rounded-xl shadow-lg">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left text-gray-400">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="px-4 py-3">SN</th>
+                                            <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="scrip">Scrip<span class="sort-indicator"></span></th>
+                                            <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="quantity">Quantity<span class="sort-indicator"></span></th>
+                                            <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="purchasePrice">Purchase Price<span class="sort-indicator"></span></th>
+                                            <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="ltp">LTP<span class="sort-indicator"></span></th>
+                                            <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="fiftyTwoWeekHigh">52w High<span class="sort-indicator"></span></th>
+                                            <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="fiftyTwoWeekLow">52w Low<span class="sort-indicator"></span></th>
+                                            <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="profitOrLoss">P/L (NPR)<span class="sort-indicator"></span></th>
+                                            <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="profitOrLossPercent">P/L (%)<span class="sort-indicator"></span></th>
+                                            <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="currentValue">Current Value<span class="sort-indicator"></span></th>
+                                            <th scope="col" class="px-4 py-3 table-header-sortable" data-sort="weight">Weight (%)<span class="sort-indicator"></span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="holdingsTableBody"></tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Watchlist Panel -->
+                    <div id="watchlist-panel" class="tab-panel hidden">
+                        <section class="section p-4 sm:p-6 rounded-xl shadow-lg">
+                             <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-xl font-semibold text-gray-100">My Watchlist</h2>
+                                <button id="openWatchlistModalBtn" class="bg-blue-600 text-white font-semibold py-2 px-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
+                                    <span>Add to Watchlist</span>
+                                </button>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left text-gray-400">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="px-4 py-3">Symbol</th>
+                                            <th scope="col" class="px-4 py-3">LTP</th>
+                                            <th scope="col" class="px-4 py-3">High</th>
+                                            <th scope="col" class="px-4 py-3">Low</th>
+                                            <th scope="col" class="px-4 py-3">Open</th>
+                                            <th scope="col" class="px-4 py-3">Prev. Close</th>
+                                            <th scope="col" class="px-4 py-3">Turnover</th>
+                                            <th scope="col" class="px-4 py-3">Volume</th>
+                                            <th scope="col" class="px-4 py-3">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="watchlistTableBody"></tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- Market Prices Panel -->
+                    <div id="prices-panel" class="tab-panel hidden">
+                        <section class="section p-4 sm:p-6 rounded-xl shadow-lg">
+                            <div class="mb-4">
+                                <input type="text" id="marketSearchInput" placeholder="Search by Symbol..." class="w-full sm:w-1/3 px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left text-gray-400">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Symbol">Symbol<span class="sort-indicator-market"></span></th>
+                                            <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="LTP">LTP<span class="sort-indicator-market"></span></th>
+                                            <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="High">High<span class="sort-indicator-market"></span></th>
+                                            <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Low">Low<span class="sort-indicator-market"></span></th>
+                                            <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Open">Open<span class="sort-indicator-market"></span></th>
+                                            <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Prev. Close">Prev. Close<span class="sort-indicator-market"></span></th>
+                                            <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Turnover">Turnover<span class="sort-indicator-market"></span></th>
+                                            <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Vol">Volume<span class="sort-indicator-market"></span></th>
+                                            <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Diff">Diff<span class="sort-indicator-market"></span></th>
+                                            <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Diff %">Diff %<span class="sort-indicator-market"></span></th>
+                                            <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Range">Range<span class="sort-indicator-market"></span></th>
+                                            <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="Range %">Range %<span class="sort-indicator-market"></span></th>
+                                            <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="VWAP">VWAP<span class="sort-indicator-market"></span></th>
+                                            <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="52 Weeks High">52w High<span class="sort-indicator-market"></span></th>
+                                            <th scope="col" class="px-4 py-3 market-header-sortable" data-sort="52 Weeks Low">52w Low<span class="sort-indicator-market"></span></th>
+                                            <th scope="col" class="px-4 py-3">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="marketPricesTableBody"></tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+                    
+                    <!-- Realized Gain Panel -->
+                    <div id="realized-panel" class="tab-panel hidden">
+                        <section class="section p-4 sm:p-6 rounded-xl shadow-lg">
+                            <div class="flex justify-between items-center mb-4">
+                                <h2 class="text-xl font-semibold text-gray-100">Realized Gain/Loss</h2>
+                                <button id="openRealizedGainModalBtn" class="bg-teal-600 text-white font-semibold py-2 px-3 rounded-lg hover:bg-teal-700 transition-colors flex items-center gap-2 text-sm">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
+                                    <span>Add Realized Gain</span>
+                                </button>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left text-gray-400">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="px-4 py-3">Scrip</th>
+                                            <th scope="col" class="px-4 py-3">Quantity</th>
+                                            <th scope="col" class="px-4 py-3">Purchase Price</th>
+                                            <th scope="col" class="px-4 py-3">Sell Price</th>
+                                            <th scope="col" class="px-4 py-3">Sell Date</th>
+                                            <th scope="col" class="px-4 py-3">Profit/Loss</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="realizedGainTableBody"></tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+
+                </div>
+            </main>
+            
+            <footer class="text-center mt-12 text-sm text-gray-500">
+                <p>Developed by Pacman With ❤️</p>
+            </footer>
+        </div>
         
-        <footer class="text-center mt-12 text-sm text-gray-500">
-            <p>Developed by Pacman With ❤️</p>
-        </footer>
-    </div>
-    
-    <!-- Add Stock Modal -->
-    <div id="addStockModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center hidden z-50">
-        <div class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-md border border-gray-700">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-100">Add New Stock</h2>
-                <button id="closeModalBtn" class="text-gray-400 hover:text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
-            </div>
-            <form id="addStockForm">
-                <div class="space-y-4">
-                    <div>
-                        <label for="scrip" class="block text-sm font-medium text-gray-300 mb-1">Scrip (Ticker)</label>
-                        <input type="text" id="scrip" name="scrip" placeholder="e.g., NTC" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                    </div>
-                    <div>
-                        <label for="shares" class="block text-sm font-medium text-gray-300 mb-1">Number of Shares</label>
-                        <input type="number" id="shares" name="shares" placeholder="e.g., 100" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                    </div>
-                    <div>
-                        <label for="price" class="block text-sm font-medium text-gray-300 mb-1">Purchase Price per Share</label>
-                        <input type="number" id="price" name="price" step="0.01" placeholder="e.g., 750.50" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-                    </div>
+        <!-- Add Stock Modal -->
+        <div id="addStockModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center hidden z-50">
+            <div class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-md border border-gray-700">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-100">Add New Stock</h2>
+                    <button id="closeModalBtn" class="text-gray-400 hover:text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
                 </div>
-                <div class="mt-8">
-                    <button type="submit" class="w-full bg-indigo-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-indigo-700 transition-colors">Add Stock to Portfolio</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Add to Watchlist Modal -->
-    <div id="addWatchlistModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center hidden z-50">
-        <div class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-md border border-gray-700">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-100">Add to Watchlist</h2>
-                <button id="closeWatchlistModalBtn" class="text-gray-400 hover:text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
-            </div>
-            <form id="addWatchlistForm">
-                 <div class="space-y-4">
-                    <div>
-                        <label for="watchlistScrip" class="block text-sm font-medium text-gray-300 mb-1">Scrip (Ticker)</label>
-                        <div class="search-dropdown">
-                            <input type="text" id="watchlistScrip" name="watchlistScrip" placeholder="Search for a stock..." required autocomplete="off" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            <div id="watchlistOptions" class="search-dropdown-options hidden"></div>
+                <form id="addStockForm">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="scrip" class="block text-sm font-medium text-gray-300 mb-1">Scrip (Ticker)</label>
+                            <input type="text" id="scrip" name="scrip" placeholder="e.g., NTC" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label for="shares" class="block text-sm font-medium text-gray-300 mb-1">Number of Shares</label>
+                            <input type="number" id="shares" name="shares" placeholder="e.g., 100" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label for="price" class="block text-sm font-medium text-gray-300 mb-1">Purchase Price per Share</label>
+                            <input type="number" id="price" name="price" step="0.01" placeholder="e.g., 750.50" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
                     </div>
-                </div>
-                <div class="mt-8">
-                    <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors">Add to Watchlist</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Add Realized Gain Modal -->
-    <div id="addRealizedGainModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center hidden z-50">
-        <div class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-md border border-gray-700">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-100">Add Realized Gain</h2>
-                <button id="closeRealizedGainModalBtn" class="text-gray-400 hover:text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
+                    <div class="mt-8">
+                        <button type="submit" class="w-full bg-indigo-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-indigo-700 transition-colors">Add Stock to Portfolio</button>
+                    </div>
+                </form>
             </div>
-            <form id="addRealizedGainForm">
-                <div class="space-y-4">
-                    <div>
-                        <label for="realizedScrip" class="block text-sm font-medium text-gray-300 mb-1">Scrip (Ticker)</label>
-                        <div class="search-dropdown">
-                            <input type="text" id="realizedScrip" name="realizedScrip" placeholder="e.g., NABIL" required autocomplete="off" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
-                            <div id="realizedGainOptions" class="search-dropdown-options hidden"></div>
+        </div>
+
+        <!-- Add to Watchlist Modal -->
+        <div id="addWatchlistModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center hidden z-50">
+            <div class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-md border border-gray-700">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-100">Add to Watchlist</h2>
+                    <button id="closeWatchlistModalBtn" class="text-gray-400 hover:text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+                <form id="addWatchlistForm">
+                     <div class="space-y-4">
+                        <div>
+                            <label for="watchlistScrip" class="block text-sm font-medium text-gray-300 mb-1">Scrip (Ticker)</label>
+                            <div class="search-dropdown">
+                                <input type="text" id="watchlistScrip" name="watchlistScrip" placeholder="Search for a stock..." required autocomplete="off" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                <div id="watchlistOptions" class="search-dropdown-options hidden"></div>
+                            </div>
                         </div>
                     </div>
-                    <div>
-                        <label for="realizedQuantity" class="block text-sm font-medium text-gray-300 mb-1">Quantity</label>
-                        <input type="number" id="realizedQuantity" name="realizedQuantity" placeholder="e.g., 10" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                    <div class="mt-8">
+                        <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors">Add to Watchlist</button>
                     </div>
-                    <div>
-                        <label for="realizedPurchasePrice" class="block text-sm font-medium text-gray-300 mb-1">Purchase Price</label>
-                        <input type="number" id="realizedPurchasePrice" name="realizedPurchasePrice" step="0.01" placeholder="e.g., 350" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
-                    </div>
-                    <div>
-                        <label for="realizedSellPrice" class="block text-sm font-medium text-gray-300 mb-1">Sell Price</label>
-                        <input type="number" id="realizedSellPrice" name="realizedSellPrice" step="0.01" placeholder="e.g., 400" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
-                    </div>
-                    <div>
-                        <label for="realizedSellDate" class="block text-sm font-medium text-gray-300 mb-1">Sell Date</label>
-                        <input type="date" id="realizedSellDate" name="realizedSellDate" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
-                    </div>
-                </div>
-                <div class="mt-8">
-                    <button type="submit" class="w-full bg-teal-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-teal-700 transition-colors">Add Transaction</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-
-    <!-- Chart Expansion Modal -->
-    <div id="chartModal" class="fixed inset-0 bg-gray-900 bg-opacity-80 flex items-center justify-center hidden z-50 p-4">
-        <div class="bg-gray-800 p-4 sm:p-6 rounded-xl shadow-2xl w-full max-w-4xl h-full max-h-[80vh] border border-gray-700 flex flex-col">
-            <div class="flex justify-between items-center mb-4">
-                <h2 id="chartModalTitle" class="text-xl font-bold text-gray-100">Chart</h2>
-                <button id="closeChartModalBtn" class="text-gray-400 hover:text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
+                </form>
             </div>
-            <div id="chartModalContainer" class="flex-grow relative">
-                <!-- Expanded chart will be rendered here -->
+        </div>
+
+        <!-- Add Realized Gain Modal -->
+        <div id="addRealizedGainModal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center hidden z-50">
+            <div class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-md border border-gray-700">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-100">Add Realized Gain</h2>
+                    <button id="closeRealizedGainModalBtn" class="text-gray-400 hover:text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+                <form id="addRealizedGainForm">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="realizedScrip" class="block text-sm font-medium text-gray-300 mb-1">Scrip (Ticker)</label>
+                            <div class="search-dropdown">
+                                <input type="text" id="realizedScrip" name="realizedScrip" placeholder="e.g., NABIL" required autocomplete="off" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                                <div id="realizedGainOptions" class="search-dropdown-options hidden"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="realizedQuantity" class="block text-sm font-medium text-gray-300 mb-1">Quantity</label>
+                            <input type="number" id="realizedQuantity" name="realizedQuantity" placeholder="e.g., 10" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                        </div>
+                        <div>
+                            <label for="realizedPurchasePrice" class="block text-sm font-medium text-gray-300 mb-1">Purchase Price</label>
+                            <input type="number" id="realizedPurchasePrice" name="realizedPurchasePrice" step="0.01" placeholder="e.g., 350" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                        </div>
+                        <div>
+                            <label for="realizedSellPrice" class="block text-sm font-medium text-gray-300 mb-1">Sell Price</label>
+                            <input type="number" id="realizedSellPrice" name="realizedSellPrice" step="0.01" placeholder="e.g., 400" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                        </div>
+                        <div>
+                            <label for="realizedSellDate" class="block text-sm font-medium text-gray-300 mb-1">Sell Date</label>
+                            <input type="date" id="realizedSellDate" name="realizedSellDate" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+                        </div>
+                    </div>
+                    <div class="mt-8">
+                        <button type="submit" class="w-full bg-teal-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-teal-700 transition-colors">Add Transaction</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Chart Expansion Modal -->
+        <div id="chartModal" class="fixed inset-0 bg-gray-900 bg-opacity-80 flex items-center justify-center hidden z-50 p-4">
+            <div class="bg-gray-800 p-4 sm:p-6 rounded-xl shadow-2xl w-full max-w-4xl h-full max-h-[80vh] border border-gray-700 flex flex-col">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 id="chartModalTitle" class="text-xl font-bold text-gray-100">Chart</h2>
+                    <button id="closeChartModalBtn" class="text-gray-400 hover:text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+                <div id="chartModalContainer" class="flex-grow relative">
+                    <!-- Expanded chart will be rendered here -->
+                </div>
             </div>
         </div>
     </div>
@@ -506,12 +557,96 @@
 
 
 <script>
+// --- LOGIN FUNCTIONALITY ---
+const loginScreenEl = document.getElementById("loginScreen");
+const loginCardEl = document.getElementById("loginCard");
+const passwordInputEl = document.getElementById("passwordInput");
+const loginButtonEl = document.getElementById("loginButton");
+const loginErrorEl = document.getElementById("loginError");
+const buttonTextEl = document.getElementById("buttonText");
+const spinnerEl = document.getElementById("spinner");
+const mainDashboardEl = document.getElementById("mainDashboard");
+
+const correctHash = "f4ae50c1ff8b3ac6fed89a81ece4de29cc6a3a6f490680c9300c4b5fdfc4277d";
+
+async function sha256(message) {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function checkPassword() {
+    setLoading(true);
+    hideError();
+    const input = passwordInputEl.value;
+    const inputHash = await sha256(input);
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    if (inputHash === correctHash) {
+        loginScreenEl.classList.add('opacity-0');
+        setTimeout(() => {
+            loginScreenEl.style.display = "none";
+            mainDashboardEl.classList.remove("hidden");
+            // Initialize the dashboard after login
+            initializeDashboard();
+        }, 500);
+    } else {
+        showError();
+        passwordInputEl.value = "";
+        setLoading(false);
+    }
+}
+
+function setLoading(isLoading) {
+    if (isLoading) {
+        loginButtonEl.disabled = true;
+        buttonTextEl.classList.add('hidden');
+        spinnerEl.classList.remove('hidden');
+    } else {
+        loginButtonEl.disabled = false;
+        buttonTextEl.classList.remove('hidden');
+        spinnerEl.classList.add('hidden');
+    }
+}
+
+function showError() {
+    loginErrorEl.classList.remove('opacity-0', '-translate-y-2');
+    loginErrorEl.classList.add('opacity-100', 'translate-y-0');
+    loginCardEl.classList.add('animate-shake');
+    setTimeout(() => {
+        loginCardEl.classList.remove('animate-shake');
+    }, 500);
+}
+
+function hideError() {
+     loginErrorEl.classList.add('opacity-0', '-translate-y-2');
+     loginErrorEl.classList.remove('opacity-100', 'translate-y-0');
+}
+
+// Add login event listeners
+loginButtonEl.addEventListener('click', checkPassword);
+passwordInputEl.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        checkPassword();
+    }
+});
+// Trigger login card entry animation
+window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        loginCardEl.classList.remove('opacity-0', 'scale-95');
+    }, 100);
+});
+
+// --- DASHBOARD FUNCTIONALITY ---
 // --- DATA STORE & STATE ---
 let portfolioData = [];
 let watchlistData = [];
 let marketPricesData = [];
 let realizedGainData = [];
 const PORTFOLIO_STORAGE_KEY = 'nepsePortfolio';
+const WATCHLIST_STORAGE_KEY = 'nepseWatchlist';
+const REALIZEDGAIN_STORAGE_KEY = 'nepseRealizedGain';
 let portfolioSortState = { column: 'currentValue', direction: 'desc' };
 let marketSortState = { column: 'Turnover', direction: 'desc' };
 let chartInstances = {};
@@ -519,21 +654,28 @@ let toastTimeout;
 const ALL_STOCKS = ['ACLBSL','ADBL','ADBLD83','AHL','AHPC','AKJCL','AKPL','ALBSL','ALICL','ANLB','API','AVYAN','BARUN','BBC','BEDCBFC','BGWT','BHDC','BHL','BHPL','BNHC','BNL','BNT','BPCL','C30MF','CBBL','CCBD88','CFCL','CGH','CHCL','CHDC','CHL','CIT','CITY','CKHL','CLI','CMF2','CORBL','CREST','CYCLCZBIL','DDBL','DHPL','DLBS','DOLTI','DORDI','EBL','EBLD85','EBLD86','EBLD91','EBLEB89','EDBL','EHPL','ENL','FMDBL','FOWAD','GBBD85','GBBL','GBIME','GBIMEP','GBLBS','GCIL','GFCL','GHL','GIBF1','GILB','GLBSL','GLH','GMFBS','GMFIL','GMLI','GRDBL','GSY','GUFL','GVL','GWFD83','H8020','HATHY','HBL','HDHP','CHDL','HEI','HEIP','HHL','HIDCL','HIDCLP','HLBSL','HLI','HPPL','HRL','HURJA','ICFC','ICFCD88','IGI','IHL','ILBS','ILI','JBBD87','JBBL','JBLB','JFL','JOSHI','JSLBB','KBL','KBLD89','KBSH','KDBY','KDL','KEF','KKHC','KMCDB','KPCL','KSBBL','KSBBLD87','KSY','LBB','LBBL','LBBLD89','LBLD86','LEC','LICN','LLBS','LSL','LUK','LVF2','MAKAR','MANDU','MATRI','MBJC','MBL','MBLD2085','MBLD87','MBLEF','MCHL','MDB','MEHL','MEL','MEN','MERO','MFIL','MFLD85','MHCL','MHL','MHNL','MKCL','MKHC','MKHL','MKJC','MLBBL','MLBL','MLBLD89','MLBLPO','MLBS','MLBSL','MMF1','MMKJL','MNBBL','MND84/85','MNMF1','MPFL','MSHL','MSLB','NABBC','NABIL','NADEP','NBF2','NBF3','NBL','NBLD82','NBLD85','NBLD87','NCCD86','NESDO','NFS','NGPL','NHDL','NHPC','NIBD84','NIBLGF','NIBLSTF','NIBSF2','NICA','NICAD8283','NICBF','NICFC','NICGF2','NICL','NICLBSL','NICSF','NIFRA','NIFRAGED','NIL','NIMB','NIMBPO','NLG','NLIC','NLICL','NMB','NMB50','NMBHF2','NMBMF','NMFBS','NMIC','NMLBBL','NRIC','NRN','NSIF2','NTC','NUBL','NWCL','NYADI','OHL','OMPL','PBD84','PBD85','PBD88','PCBL','PFL','PHCL','PMHPL','PMLI','PPCL','PPL','PRIN','PROFL','PRSF','PRVU','PSF','PURE','RADHI','RAWA','RBCL','RBCLPO','RFPL','RHGCL','RHPL','RIDI','RLFL','RMF1','RMF2','RNLI','RSDC','RSY','RURU','SADBL','SAGF','SAHAS','SALICO','SAMAJ','SAND2085','SANIMA','SANVI','SAPDBL','SARBTM','SBCF','SBI','SBID86','SBID83','SBL','SCB','SCBD','SEF','SFCL','SFEF','SFMF','SGHCSGIC','SHEL','SHINE','SHIVM','SHL','SHLBS','SHPC','SICL','SIFC','SIGS2','SIGS3','SIKLES','SINDUSJCL','SJLIC','SKBBL','SLBBL','SLBS','SLCF','SMATA','SMB','SMFBS','SMH','SMHL','SMJC','SMPDA','SNLI','SONA','SPC','SPDL','SPHL','SPIL','SPL','SRBLD83','SRLI','SSHL','STC','SWBBL','SWMF','TAMOR','TPC','TRH','TSHL','TTL','TVCL','UAIL','UHEWA','ULBSL','ULHC','UMHL','UMRH','UNHPL','UNL','UNLB','UPCL','UPPER','USHEC','USHL','USLB','VLBS','VLUCL','WNLB'];
 
 // --- INITIALIZATION ---
-document.addEventListener('DOMContentLoaded', () => {
+function initializeDashboard() {
     Chart.defaults.color = '#9ca3af';
     Chart.defaults.borderColor = '#374151';
     setDashboardDate();
     setupEventListeners();
 
     loadPortfolioFromLocalStorage();
+    // Initial render with locally stored data before fetching
     runAllCalculations();
 
     (async () => {
         showToast("Fetching latest market data...", "info");
         await fetchMarketSummary();
         await fetchMarketPrices();
-        await loadWatchlistFromApi();
-        await fetchRealizedGain();
+        
+        // Try to load from local storage first, then fallback to API
+        if (!loadWatchlistFromLocalStorage()) {
+            await loadWatchlistFromApi();
+        }
+        if (!loadRealizedGainFromLocalStorage()) {
+            await fetchRealizedGain();
+        }
         
         if (portfolioData.length === 0) {
             showToast("Loading default portfolio...", "info");
@@ -545,20 +687,46 @@ document.addEventListener('DOMContentLoaded', () => {
         runAllCalculations();
         showToast("Dashboard is up to date!", "success");
     })();
-});
+}
 
 
 // --- LOCAL STORAGE ---
 function savePortfolioToLocalStorage() {
     localStorage.setItem(PORTFOLIO_STORAGE_KEY, JSON.stringify(portfolioData));
 }
-
 function loadPortfolioFromLocalStorage() {
     const saved = localStorage.getItem(PORTFOLIO_STORAGE_KEY);
     if (saved) {
         portfolioData = JSON.parse(saved);
         showToast("Loaded portfolio from local storage.", "success");
     }
+}
+function saveWatchlistToLocalStorage() {
+    // Storing only symbols is efficient and ensures data is fresh on reload
+    const watchlistSymbols = watchlistData.map(item => item.Symbol);
+    localStorage.setItem(WATCHLIST_STORAGE_KEY, JSON.stringify(watchlistSymbols));
+}
+function loadWatchlistFromLocalStorage() {
+    const saved = localStorage.getItem(WATCHLIST_STORAGE_KEY);
+    if (saved && marketPricesData.length > 0) {
+        const symbols = JSON.parse(saved);
+        watchlistData = marketPricesData.filter(item => symbols.includes(item.Symbol));
+        showToast("Loaded watchlist from local storage.", "success");
+        return true;
+    }
+    return false;
+}
+function saveRealizedGainToLocalStorage() {
+    localStorage.setItem(REALIZEDGAIN_STORAGE_KEY, JSON.stringify(realizedGainData));
+}
+function loadRealizedGainFromLocalStorage() {
+    const saved = localStorage.getItem(REALIZEDGAIN_STORAGE_KEY);
+    if (saved) {
+        realizedGainData = JSON.parse(saved);
+        showToast("Loaded realized gains from local storage.", "success");
+        return true;
+    }
+    return false;
 }
 
 // --- UI FUNCTIONS ---
@@ -605,7 +773,6 @@ async function fetchMarketSummary() {
         
         const data = await response.json();
 
-        // Helper to format large numbers
         const formatNumber = (num) => {
             if (num >= 1e11) return (num / 1e11).toFixed(2) + ' Kharba';
             if (num >= 1e9) return (num / 1e9).toFixed(2) + ' Arba';
@@ -616,7 +783,7 @@ async function fetchMarketSummary() {
         
         const parseAndFormatCap = (capString) => {
             if (!capString || typeof capString !== 'string') return 'N/A';
-            const value = parseFloat(capString.replace(/,/g, '')) * 1e6; // Value is in Millions
+            const value = parseFloat(capString.replace(/,/g, '')) * 1e6;
             return `NPR ${formatNumber(value)}`;
         };
 
@@ -627,7 +794,6 @@ async function fetchMarketSummary() {
         document.getElementById('marketFloatCap').textContent = parseAndFormatCap(data['Floated Market Cap']);
         document.getElementById('marketTotalCap').textContent = parseAndFormatCap(data['Total Market Cap']);
         
-        // Update market summary date
         if(data.Date) {
              document.getElementById('marketSummaryDate').textContent = new Date(data.Date).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
         }
@@ -698,7 +864,7 @@ async function loadWatchlistFromApi() {
 
         const scripSet = new Set(wishlistScripsData.map(item => item.Script).filter(Boolean));
         watchlistData = marketPricesData.filter(item => scripSet.has(item.Symbol));
-        
+        saveWatchlistToLocalStorage();
         showToast("Loaded watchlist from server.", "success");
 
     } catch (error) {
@@ -716,7 +882,7 @@ async function fetchRealizedGain() {
         if (Array.isArray(data)) {
             realizedGainData = data.map(apiItem => {
                 const purchaseValue = Number(apiItem["Purchase Value"]) || 0;
-                const quantitySold = Number(apiItem["Quantity Sold"]) || 1; // Avoid division by zero
+                const quantitySold = Number(apiItem["Quantity Sold"]) || 1;
                 return {
                     scrip: apiItem.Scrip,
                     quantity: quantitySold,
@@ -729,12 +895,13 @@ async function fetchRealizedGain() {
         } else {
             realizedGainData = [];
         }
+        saveRealizedGainToLocalStorage();
         renderRealizedGainTable();
     } catch (error) {
         console.error('Failed to fetch realized gain data:', error);
         showToast('Could not fetch realized gain data.', 'error');
-        realizedGainData = []; // Reset on error
-        renderRealizedGainTable(); // Render empty state
+        realizedGainData = [];
+        renderRealizedGainTable();
     }
 }
 
@@ -1115,7 +1282,6 @@ function setupRealizedGainModal() {
     const dateInput = document.getElementById('realizedSellDate');
 
     openBtn.addEventListener('click', () => {
-        // Set today's date as default
         dateInput.value = new Date().toISOString().split('T')[0];
         modal.classList.remove('hidden');
     });
@@ -1147,7 +1313,7 @@ async function setupAddWatchlistForm() {
         e.preventDefault();
         const scrip = document.getElementById('watchlistScrip').value.toUpperCase().trim();
         if (scrip) {
-            await addToWatchlistFromMarket(scrip); // Reuse the same logic
+            await addToWatchlistFromMarket(scrip);
             e.target.reset();
             document.getElementById('addWatchlistModal').classList.add('hidden');
         } else { 
@@ -1166,22 +1332,16 @@ async function setupAddRealizedGainForm() {
         const sell_date = document.getElementById('realizedSellDate').value;
 
         if (scrip && quantity > 0 && purchase_price > 0 && sell_price > 0 && sell_date) {
-            const payload = { scrip, quantity, purchase_price, sell_price, sell_date };
-            try {
-                const response = await fetch('https://nepsefloorsheetapi.onrender.com/api/v1/portfolio/realized-gain', {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload),
-                });
-                if (!response.ok) throw new Error(`API Error: ${response.status}`);
-                await fetchRealizedGain(); // Refresh the table
-                e.target.reset();
-                document.getElementById('addRealizedGainModal').classList.add('hidden');
-                showToast('Realized gain added successfully!', 'success');
-            } catch (error) {
-                console.error('Failed to add realized gain:', error);
-                showToast('Could not add realized gain.', 'error');
-            }
+            const newEntry = {
+                scrip, quantity, purchase_price, sell_price, sell_date,
+                profit_loss: (sell_price - purchase_price) * quantity
+            };
+            realizedGainData.push(newEntry);
+            saveRealizedGainToLocalStorage();
+            runAllCalculations();
+            e.target.reset();
+            document.getElementById('addRealizedGainModal').classList.add('hidden');
+            showToast('Realized gain added successfully!', 'success');
         } else {
             showToast('Please fill all fields with valid data.', 'error');
         }
@@ -1194,44 +1354,23 @@ async function addToWatchlistFromMarket(scrip) {
         showToast(`${scrip} is already in your watchlist.`, 'info');
         return;
     }
-
-    try {
-        const response = await fetch('https://nepsefloorsheetapi.onrender.com/api/v1/portfolio/wishlist/add', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ scrip: scrip }),
-        });
-        if (!response.ok) throw new Error(`API Error: ${response.status}`);
-        
-        const stockData = marketPricesData.find(item => item.Symbol === scrip);
-        if (stockData) {
-            watchlistData.push(stockData);
-            runAllCalculations();
-            showToast(`${scrip} added to watchlist.`, 'success');
-        }
-    } catch (error) {
-        console.error('Failed to add to watchlist:', error);
-        showToast(`Could not add ${scrip} to watchlist.`, 'error');
+    const stockData = marketPricesData.find(item => item.Symbol === scrip);
+    if (stockData) {
+        watchlistData.push(stockData);
+        saveWatchlistToLocalStorage();
+        runAllCalculations();
+        showToast(`${scrip} added to watchlist.`, 'success');
+    } else {
+        showToast(`Could not find data for ${scrip}.`, 'error');
     }
 }
 
 
 async function removeFromWatchlist(scrip) {
-    try {
-        const response = await fetch('https://nepsefloorsheetapi.onrender.com/api/v1/portfolio/wishlist/remove', {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ scrip: scrip }),
-        });
-        if (!response.ok) throw new Error(`API Error: ${response.status}`);
-        
-        watchlistData = watchlistData.filter(item => item.Symbol !== scrip);
-        runAllCalculations();
-        showToast(`${scrip} removed from watchlist.`, 'success');
-    } catch (error) {
-        console.error('Failed to remove from watchlist:', error);
-        showToast(`Could not remove ${scrip} from watchlist.`, 'error');
-    }
+    watchlistData = watchlistData.filter(item => item.Symbol !== scrip);
+    saveWatchlistToLocalStorage();
+    runAllCalculations();
+    showToast(`${scrip} removed from watchlist.`, 'success');
 }
 
 function setupSorting() {
@@ -1299,10 +1438,8 @@ function setupSearchableDropdown() {
     const searchInput = document.getElementById('watchlistScrip');
     const optionsContainer = document.getElementById('watchlistOptions');
 
-    // Populate options
     optionsContainer.innerHTML = ALL_STOCKS.map(stock => `<div class="search-dropdown-option" data-value="${stock}">${stock}</div>`).join('');
 
-    // Show/hide on focus/blur
     searchInput.addEventListener('focus', () => optionsContainer.classList.remove('hidden'));
     document.addEventListener('click', (e) => {
         if (!searchInput.contains(e.target) && !optionsContainer.contains(e.target)) {
@@ -1310,7 +1447,6 @@ function setupSearchableDropdown() {
         }
     });
 
-    // Filter on input
     searchInput.addEventListener('input', () => {
         const filter = searchInput.value.toUpperCase();
         optionsContainer.querySelectorAll('.search-dropdown-option').forEach(option => {
@@ -1319,7 +1455,6 @@ function setupSearchableDropdown() {
         });
     });
 
-    // Handle selection
     optionsContainer.addEventListener('click', (e) => {
         if (e.target.classList.contains('search-dropdown-option')) {
             searchInput.value = e.target.getAttribute('data-value');
@@ -1328,15 +1463,15 @@ function setupSearchableDropdown() {
     });
 }
 
+
+
 function setupRealizedGainDropdown() {
     const searchInput = document.getElementById('realizedScrip');
     const optionsContainer = document.getElementById('realizedGainOptions');
     const purchasePriceInput = document.getElementById('realizedPurchasePrice');
 
-    // Populate options
     optionsContainer.innerHTML = ALL_STOCKS.map(stock => `<div class="search-dropdown-option" data-value="${stock}">${stock}</div>`).join('');
 
-    // Show/hide on focus/blur
     searchInput.addEventListener('focus', () => optionsContainer.classList.remove('hidden'));
     document.addEventListener('click', (e) => {
         if (!searchInput.contains(e.target) && !optionsContainer.contains(e.target)) {
@@ -1344,30 +1479,26 @@ function setupRealizedGainDropdown() {
         }
     });
 
-    // Filter on input
     searchInput.addEventListener('input', () => {
         const filter = searchInput.value.toUpperCase();
         optionsContainer.querySelectorAll('.search-dropdown-option').forEach(option => {
             const value = option.getAttribute('data-value');
             option.style.display = value.toUpperCase().includes(filter) ? '' : 'none';
         });
-        // Clear purchase price if user types manually
         purchasePriceInput.value = '';
     });
 
-    // Handle selection
     optionsContainer.addEventListener('click', (e) => {
         if (e.target.classList.contains('search-dropdown-option')) {
             const selectedScrip = e.target.getAttribute('data-value');
             searchInput.value = selectedScrip;
             optionsContainer.classList.add('hidden');
 
-            // Auto-populate purchase price
             const holding = portfolioData.find(stock => stock.scrip === selectedScrip);
             if (holding) {
                 purchasePriceInput.value = holding.purchasePrice.toFixed(2);
             } else {
-                purchasePriceInput.value = ''; // Clear if not in portfolio
+                purchasePriceInput.value = '';
             }
         }
     });
@@ -1387,7 +1518,7 @@ function setupChartExpansion() {
             chartInstances[modalCanvasId].destroy();
             delete chartInstances[modalCanvasId];
         }
-        modalContainer.innerHTML = ''; // Clear the container
+        modalContainer.innerHTML = '';
     };
 
     closeBtn.addEventListener('click', closeModal);
